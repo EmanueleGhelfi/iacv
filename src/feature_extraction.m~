@@ -206,10 +206,11 @@ for ii = 1:2:size(perpLines,2)
 end
 H = getH_from_affine(ls,ms);
 %% Transform
-tform = projective2d((H_r_aff * H).');
+H_
+tform = projective2d(H);
 %tform = maketform('projective', H);
 %tform.T = tform.T .* max(size(Im))
-outputImage = imwarp(im_rgb, tform);
+outputImage = imwarp(outputImage_aff, tform);
 %Iout = imtransform(im_rgb, tform);
 %outputImage = imwarp(im_rgb, tform);
 figure();
