@@ -2,7 +2,7 @@
 clc
 clear all
 debug = false; % do not diplay a thousand of images
-%% Use Canny ( I do not remember if with or without contrast adjustment)
+% Use Canny with contrast adjustment
 %% Open the image
 im_rgb = imread('Input image.jpeg');
 
@@ -105,7 +105,7 @@ end
 %      l1 l2 l3] where the last line is l_inf'
 
 % Extract parallel lines
-line_indices = [1, 2, 1, 18, 18, 2, 55, 31, 55, 15, 31, 15, 4, 24, 39, 4, 39, 24, 13, 24];
+line_indices = [1, 2, 1, 18, 18, 2, 55, 31, 55, 15, 31, 15, 4, 24, 39, 4, 39, 24, 13, 24, 50, 19, 19, 16, 68, 33, 3, 24, 3, 39];
 
 % in this we save parallel lines 
 parallelLines = zeros(3, size(line_indices,2));
@@ -130,7 +130,7 @@ imshow(outputImage_aff);
 hold on
 %% Metric rectification
 % perpendicular line indices
-perp_line_indices = [1, 31, 31, 2, 4, 33, 24, 68, 67, 16, 31, 3, 2, 55, 68, 3, 39, 33, 62, 39];
+perp_line_indices = [1, 31, 31, 2, 4, 33, 24, 68, 67, 16, 31, 8, 2, 55, 68, 3, 39, 33, 62, 39, 67, 19, 55, 1, 55, 18, 31, 18, 24, 33, 67, 50];
 
 % in this we save perpendicular lines 
 perpLines = zeros(3, size(perp_line_indices,2));
@@ -140,31 +140,6 @@ for ii = 1:size(perp_line_indices,2)
     perpLines(:, ii) =  H_r_aff.' \ getLine(lines(perp_line_indices(ii)).point1, lines(perp_line_indices(ii)).point2);
 end
 
-%% Shape reconstruction
-% x*cos(theta) + y*sin(theta) - rho = 0
-% compute lines
-l1 = getLine(lines(1).point1, lines(1).point2);
-l2 = getLine(lines(31).point1, lines(31).point2);
-l3 = getLine(lines(31).point1, lines(31).point2);
-l4 = getLine(lines(2).point1, lines(2).point2);
-l5 = getLine(lines(4).point1, lines(4).point2);
-l6 = getLine(lines(33).point1, lines(33).point2);
-l7 = getLine(lines(24).point1, lines(24).point2);
-l8 = getLine(lines(68).point1, lines(68).point2);
-l9 = getLine(lines(67).point1, lines(67).point2);
-l10 = getLine(lines(16).point1, lines(16).point2);
-l11 = getLine(lines(31).point1, lines(31).point2);
-l12 = getLine(lines(3).point1, lines(3).point2);
-l13 = getLine(lines(2).point1, lines(2).point2);
-l14 = getLine(lines(55).point1, lines(55).point2);
-l15 = getLine(lines(68).point1, lines(68).point2);
-l16 = getLine(lines(3).point1, lines(3).point2);
-l17 = getLine(lines(39).point1, lines(39).point2);
-l18 = getLine(lines(33).point1, lines(33).point2);
-l19 = getLine(lines(62).point1, lines(62).point2);
-l20 = getLine(lines(39).point1, lines(39).point2);
-
-L = [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20];
 %% Plot intersection points
 % lines are correct !!!!!
 
@@ -181,20 +156,6 @@ for ii = 1:size(L,2)
     L(:,ii) = inv(H_scaling.')*L(:,ii)
 end
 
-%% compute H
-H = computeHFromOrtLines(L(:,1),L(:,2),L(:,3),L(:,4),L(:,5),L(:,6),L(:,7),L(:,8), L(:,9), L(:,10));
-
-%% compute H through linear reg OLD
-ls = [];
-ms = [];
-index = 1;
-for ii = 1:2:size(L,2)
-    ls(:, index) = L(:, ii);
-    ms(:, index) = L(:, ii+1);
-    index = index +1;
-end
-H = lin_reg_h(ls,ms);
-
 %% compute H through linear reg starting from affine
 ls = [];
 ms = [];
@@ -206,11 +167,95 @@ for ii = 1:2:size(perpLines,2)
 end
 H = getH_from_affine(ls,ms);
 %% Transform
-tform = projective2d((H_r_aff * H).');
-%tform = maketform('projective', H);
-%tform.T = tform.T .* max(size(Im))
-outputImage = imwarp(im_rgb, tform);
-%Iout = imtransform(im_rgb, tform);
-%outputImage = imwarp(im_rgb, tform);
+tform = projective2d(H.');
+outputImage = imwarp(outputImage_aff, tform);
 figure();
 imshow(outputImage);
+
+%% from original
+H_r = H * H_r_aff 
+tform = projective2d(H_r.');
+outputImage = imwarp(im_rgb, tform);
+figure();
+imshow(outputImage);
+hold on
+
+%% Measure of metric properties (relative orientation)
+% in order to determine the relative position between the vertical faces
+% it's possible to measure the cosine of the angle between the two longest
+% line in each face. (e.g. between line 1 and 4
+line_indices_for_theta = [1, 4, 2, 4, 1, 39, 18, 4, 18, 39, 18, 24, 2, 24, 2, 3, 18, 3, 1, 3];
+
+% collect estimates of theta
+theta_est = zeros(1,size(line_indices_for_theta,2)/2)
+
+index = 1
+for ii = 1:2:size(line_indices_for_theta,2)
+    l1 = getLine(lines(line_indices_for_theta(ii)).point1, lines(line_indices_for_theta(ii)).point2);
+    l2 = getLine(lines(line_indices_for_theta(ii+1)).point1, lines(line_indices_for_theta(ii+1)).point2);
+
+    % transform both lines according to the overall transformation
+    l1 = H_r.' \ l1;
+    l2 = H_r.' \ l2;
+    l1 = l1(1:2,:);
+    l2 = l2(1:2,:);
+
+    % measure the cosine between line 1 and 4
+    cos_theta = (l1.' * l2)/(norm(l1,2)*norm(l2,2));
+    theta_est(index) = acosd(cos_theta);
+    
+    index = index + 1;
+end
+
+theta = mean(theta_est)
+
+%% Measure of metric properties (relative position)
+
+% measure longside of horizontal face
+
+% get useful lines
+l1 = H_r.' \ getLine(lines(1).point1, lines(1).point2);
+l55 = H_r.' \ getLine(lines(55).point1, lines(55).point2);
+l15 = H_r.' \ getLine(lines(15).point1, lines(15).point2);
+
+% upper left point
+x_1_55 = cross(l1,l55);
+x_1_15 = cross(l1,l15);
+
+% normalization
+x_1_55 = x_1_55 ./ x_1_55(3,1) 
+x_1_15 = x_1_15 ./ x_1_15(3,1) 
+
+length_longside = norm(x_1_55 - x_1_15,2);
+
+%% Test using the other side
+
+
+%% get the origin of the other face (intersection between 62 and 39
+l62 = H_r.' \ getLine(lines(62).point1, lines(62).point2);
+l39 = H_r.' \ getLine(lines(39).point1, lines(39).point2);
+
+x_origin2 = cross(l62,l39);
+x_origin2 = x_origin2 ./ x_origin2(3,1) 
+
+x_origin1 = x_1_15;
+
+% get distance in the image
+imaged_distance = norm(x_origin2 - x_origin1,2);
+
+% relative position in mm
+relative_position = imaged_distance * 243 / length_longside 
+
+% relative coordinates (in world measures)
+relative_coordinates = (x_origin2 - x_origin1).* 243 ./ length_longside
+relative_coordinates(3,1) = 1
+
+
+
+
+
+
+
+
+
+

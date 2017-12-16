@@ -23,13 +23,21 @@ Y
 W = (X.'*X)\(X.'*Y)
 S = [W(1,1) W(2,1); W(2,1) 1]; % = KK'
 C_star_prime = [W(1,1) W(2,1) 0; W(2,1) 1 0; 0 0 0];
-C_star_prime
-det(C_star_prime)
 
-% decomposition
-K = chol(S);
+% decomposition using cholesky (not working)
+%K = chol(S)
 
 % build affine transformation
-H = [K(1,1) K(1,2) 0; K(1,2) K(2,2) 0; 0 0 1]
+% H = [K(1,1) K(1,2) 0; K(1,2) K(2,2) 0; 0 0 1]
+[U, S, V] = svd(C_star_prime);
+H = (U * diag([1/sqrt(S(1, 1)), 1/sqrt(S(2, 2)), 1])).';
+
+%[U, S, V] = svd(S)
+%U = U*diag([1/sqrt(S(1, 1)), 1/sqrt(S(2, 2))])
+%H = eye(3)
+%H(1,1) = U(1,1);
+%H(1,2) = U(1,2);
+%H(2,2) = U(2,2);
+%H(2,1) = U(2,1);
 
 

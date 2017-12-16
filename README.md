@@ -67,5 +67,27 @@ Notice that the Upper left part is a symmetric matrix and homogeneous, so it has
 
 So we can use two pair of orthogonal lines to determine its parameters. 
 
-Once found $$C^*_{inf}{'}$$ we can use standard choleski to determine Ha.
+Once found $$C^*_{inf}{'}$$ we can use standard cholesky (or SVD) to determine Ha.
+
+### Measure of Metric properties
+
+Once we have reconstructed the shape of the object metric properties can be determined, like angles.
+
+The relative orientation between vertical faces can be determined using the cosine between the two lines representing the longest line.
+
+The relative position can be determined simply by computing the difference between the origin of the two reference frames and multiplying by the scaling factor. 
+
+## Camera Calibration
+
+Camera calibration is determining the matrix K:
+
+$$P=[KR | -KRo]$$
+
+Where R is the Rotation between the camera and the world and o is the location of the camera wrt the world reference frame. We can put the world reference frame to the camera obtaining:
+
+$$P=[K|0]$$
+
+
+
+
 
