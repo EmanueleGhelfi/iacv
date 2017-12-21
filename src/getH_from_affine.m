@@ -22,7 +22,7 @@ X
 Y
 W = (X.'*X)\(X.'*Y)
 S = [W(1,1) W(2,1); W(2,1) 1]; % = KK'
-C_star_prime = [W(1,1) W(2,1) 0; W(2,1) 1 0; 0 0 0];
+C_star_prime = [W(1,1) W(2,1) 0; W(2,1) 1 0; 0 0 0]
 
 % decomposition using cholesky (not working)
 %K = chol(S)

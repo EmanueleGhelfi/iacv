@@ -83,9 +83,46 @@ Camera calibration is determining the matrix K:
 
 $$P=[KR | -KRo]$$
 
-Where R is the Rotation between the camera and the world and o is the location of the camera wrt the world reference frame. We can put the world reference frame to the camera obtaining:
+Where R is the Rotation between the camera and the world and o is the location of the camera wrt the world reference frame.
 
-$$P=[K|0]$$
+In order to determine K we need to specify some constraints on $$\omega$$ (the image of the absolute conic).
+
+Here we can use the homography method (p 211 Multiple View Geometry in Computer Vision) adapted with the reconstructive transformation (that we have found in the previous point) on the horizontal faces.
+
+1. For each horizontal face we can compute the transformation that maps its corner points to their imaged points ($$H_r^{-1}$$ since $$H_r$$ maps the image point to their real shape).
+
+2. We can compute the imaged circular points for the plane of that face as $$H_r(1,\pm i, 0)'$$. Writing H = [h1, h2, h3], the imaged circular points are h1 +- ih2.
+
+3. This gives us two constraints on the image of the absolute conic since the circular points lie on $$\omega$$:
+   $$
+   h_1^T\omega h_2= 0\\ h_1^T\omega h_1= h_2^T\omega h_2
+   $$
+   Which are linear equations in $$\omega$$.
+
+
+Other constraints that can be used are the constraints deriving from the fact that the line at infinite on the orizontal plane is orthogonal wrt the vanishing points on the vertical direction on the vertical face:
+$$
+l_{inf}^T\omega v_p = 0
+$$
+In order to determine the vanishing point of the vertical direction we can use a least square approximation using all vertical lines on the vertical face.
+
+
+
+## Localization
+
+In this point we have to find the relative position of the camera wrt the reference frame placed on the horizontal faces.
+
+This is possibe knowing the shape of the horizontal faces, knowing the size, knowing the image and knowing K.
+
+The main formula is:
+
+$$[i, j, o] = K^{-1}H$$
+
+Where H is the transformation mapping world points to image point. In this case it's $$H_r^{-1} * H_{omog}^{-1}$$.
+
+$$H_{omog}$$ it's easy to find since knowing the rectified image we should only impose it's real measure.
+
+$$H_{omog}$$ transforms the rectified image in the real world scene.
 
 
 
