@@ -1,11 +1,52 @@
+---
+typora-copy-images-to: ./imgs
+---
+
 # iacv
 Repository for the homework of Image Analysis and Computer Vision course of Politecnico di Milano 2017/2018.  
 
+## Line extraction
 
+The first step is image feature extraction and selection. 
+
+To extract lines I used the following steps:
+
+- Edge detection with Canny
+- Line detection using Hough
+
+The canny algorithm is based on 3 steps:
+
+- Convolution with derivative of Gaussian before computing image derivatives
+- Non-maximum Suppression
+- Hysteresis Thresholding
+
+The threshold parameters found for Canny are the result of many experiments. The threshold is important since too many edges cause the Hough transform to fail considering useless lines.
+
+At the end the processed image is:
+
+![edges](imgs/edges.jpg)
+
+The Hough transform is designed to detect lines, using the parametric representation of a line:
+
+$$rho = x*cos(\theta) + y*sin(\theta)$$
+
+Each individual datum (edge) votes for all the model compatible with him (f(m,xi) = 0).
+
+Steps:
+
+- Discretize model space. Set the number of votes for each model = 0
+- For each datum computes the hough transform H(xi)
+- Let xi votes for each cell of the hough space crossed by H.
+- Selects the local maxima in the hough space
+- Apply a threshold to the number of votes.
+
+Ref: https://it.mathworks.com/help/images/hough-transform.html
+
+![lines](imgs/lines.jpg)
 
 ## Shape reconstruction
 
-Here we used a stratified approach to shape reconstruction.
+Here I used a stratified approach to shape reconstruction.
 
 The final result should be an image such that the transformation between the real scene and the image is a similarity.
 
@@ -14,17 +55,18 @@ graph LR
 A[Real scene] -->B[Image]
 B --> C[Affine reconstruction]
 C --> D[Euclidean reconstruction]
+A --> D
 ```
 
 ### Affine rectification
 
 In order to perform affine rectification we require that the line at infinite in the image is mapped back to itself.
 
-So we first perform the identification of the imaged line at infinite through LSA using 10 couples of imaged parallel lines. 
+So we first perform the identification of the imaged line at infinite through LSA using n couples of imaged parallel lines. 
 
 Once found the image of the line at infinite the reconstruction matrix that rectifies the image is simply:
 $$
-\begin{vmatrix} 
+H_{r\_aff} =\begin{vmatrix} 
 1& 0 & 0 \\
 0 &  1 & 0 \\
 l1 &  l2 & l3 \\
@@ -38,7 +80,7 @@ So the last row is the imaged line at infinite.
 
 Once the image has been affinely rectified we have obtained an image such that the transformation from the original scene is an affine transformation.
 
-Affine transformation can be written as:
+Affine transformations can be written as:
 $$
 H_a = \begin{vmatrix} 
 
@@ -69,11 +111,25 @@ So we can use two pair of orthogonal lines to determine its parameters.
 
 Once found $$C^*_{inf}{'}$$ we can use standard cholesky (or SVD) to determine Ha.
 
+Since SVD does not return the matrix S ($$C_{inf}^*$$) as 
+
+$$S = \begin{vmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0  & 0 & 0\end{vmatrix}$$
+
+That is required by the algorithm I have factorized the matrix S returned by SVD through the following decomposition:
+
+$$S = \begin{vmatrix} \frac{1}{\sqrt{S_{11}})} & 0& 0 \\ 0 & \frac{1}{\sqrt{S_{22}}}  & 0   \\ 0 & 0 & 1 \end{vmatrix} \begin{vmatrix} 1 && \\&1&\\&&0\end{vmatrix} \begin{vmatrix} \frac{1}{\sqrt{S_{11}})} & 0& 0 \\ 0 & \frac{1}{\sqrt{S_{22}}}  & 0   \\ 0 & 0 & 1 \end{vmatrix} $$
+
+Doing in this way the reconstruction matrix becomes:
+
+$$H = U*S_{fact}$$
+
+Where S_fact is the left matrix of the factorization.
+
 ### Measure of Metric properties
 
 Once we have reconstructed the shape of the object metric properties can be determined, like angles.
 
-The relative orientation between vertical faces can be determined using the cosine between the two lines representing the longest line.
+The relative orientation between horizontal faces can be determined using the cosine between the two lines representing corresponding lines in each face .
 
 The relative position can be determined simply by computing the difference between the origin of the two reference frames and multiplying by the scaling factor. 
 

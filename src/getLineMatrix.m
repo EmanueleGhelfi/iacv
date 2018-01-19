@@ -8,6 +8,6 @@ for ii = 1:size(indices,2)
     % compute already transformed lines
     Ls(:, ii) = getLine(lines(indices(ii)).point1, lines(indices(ii)).point2);
 end
-L = Ls
+L = Ls;
 end
 

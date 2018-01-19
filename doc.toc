@@ -1,0 +1,14 @@
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Line Extraction}{3}
+\contentsline {subsection}{\numberline {2.1}Canny}{3}
+\contentsline {subsection}{\numberline {2.2}Hough Transform}{4}
+\contentsline {section}{\numberline {3}Shape Reconstruction}{5}
+\contentsline {subsection}{\numberline {3.1}Affine Rectification}{6}
+\contentsline {subsection}{\numberline {3.2}Euclidean Rectification}{7}
+\contentsline {section}{\numberline {4}Measure of Metric Properties}{9}
+\contentsline {section}{\numberline {5}Camera Calibration}{9}
+\contentsline {section}{\numberline {6}Localization}{12}
+\contentsline {section}{\numberline {7}Shape Reconstruction Vertical Faces }{14}
+\contentsline {section}{\numberline {8}Implementation Details}{14}
+\contentsline {subsection}{\numberline {8.1}Vanishing Points}{15}
+\contentsline {subsection}{\numberline {8.2}Line at Infinity}{16}

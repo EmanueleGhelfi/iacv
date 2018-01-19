@@ -31,7 +31,7 @@ for ii = 1:size(l_infs,2)
     l3 = li(3,1);
   
     % vector product matrix
-    lx = [0 -l3 l2; l3 0 -l1; -l2 l1 0]
+    lx = [0 -l3 l2; l3 0 -l1; -l2 l1 0];
     
     % get vp
     xi = vps(:,ii);
@@ -43,11 +43,11 @@ end
 % cast equations into matrix form
 [A,y] = equationsToMatrix(eqn,[a,b,c,d]);
 % concatenate matrices
-X = [X;double(A)]
-Y = [Y;double(y)]
+X = [X;double(A)];
+Y = [Y;double(y)];
 
 % eqn contains all the equations
-eqn = []
+eqn = [];
 % add constraints on vanishing points
 for ii = 1:size(vp1s,2)
     % first compute the element of x
@@ -62,8 +62,8 @@ end
 % cast equations into matrix form
 [A,y] = equationsToMatrix(eqn,[a,b,c,d]);
 % concatenate matrices
-%X = [X;double(A)]
-%Y = [Y;double(y)]
+%X = [X;double(A)];
+%Y = [Y;double(y)];
 
 % add constraints on homography
 
@@ -77,16 +77,16 @@ eq1 = h1.' * omega * h2 == 0;
 eq2 = h1.' * omega * h1 == h2.' * omega * h2;
 
 [A,y] = equationsToMatrix([eq1,eq2],[a,b,c,d]);
-A = double(A)
-y = double(y)
+A = double(A);
+y = double(y);
 
 % concatenate matrices
-X = [X;A]
-Y = [Y;y]
+X = [X;A];
+Y = [Y;y];
 
-W = X.'*X \ (X.'*Y)
+W = X.'*X \ (X.'*Y);
 % image of absolute conic
-IAC = double([W(1,1) 0 W(2,1); 0 1 W(3,1); W(2,1) W(3,1) W(4,1)])
+IAC = double([W(1,1) 0 W(2,1); 0 1 W(3,1); W(2,1) W(3,1) W(4,1)]);
 
 % decomposition using cholesky
 %K = inv(chol(IAC))

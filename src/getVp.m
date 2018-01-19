@@ -1,20 +1,24 @@
-function VP = getVp(lines)
-%GETVP Returns the vanishing point common to all lines doing an average
+function VP = getVp(ls)
+%GETVP Returns the vanishing point common to all lines using LSA
 %   lines is a matrix 3*n containing all lines having a common direction
 
-vps = [];
-index = 1;
-for ii = 1:size(lines,2)
-    for jj = ii+1:size(lines,2)
-        % first compute the element of x
-        li = lines(:,ii);
-        mi = lines(:,jj);
-        vp = cross(li, mi);
-        vp = vp./vp(3,1);
-        vps(:, index) = vp
-        index = index + 1;
-    end
-end
+X = []; % should be nx2 matrix (n is ls size 2) 
+Y = []; % should be n matrix of -x3 elements
 
-VP = mean(vps,2);
+index = 1;
+% computes vanishing points for each pair of lines
+for ii = 1:size(ls,2)
+    % first get the line
+    l = ls(:,ii);
+    
+    % put the first two components inside x
+    X(index, :) = [l(1), l(2)];
+    Y(index, :) = -l(3);
+    
+    index = index + 1;
+end
+W = (X.'*X)\(X.'*Y);
+VP = [W(1,1), W(2,1), 1].';
+
+
 
