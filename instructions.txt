@@ -1,42 +1,32 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+The principal matlab files are inside the “src” folder.
+The folder “old” inside “src” contains old matlab files.
 
-\f0\fs24 \cf0 The principal matlab files are inside the \'93src\'94 folder.\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 The folder \'93old\'94 inside \'93src\'94 contains old matlab files.\
-\
-\'97 MATLAB SOURCE FILES \'97\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 The main matlab file is \'93main.m\'94 that contains all the workflow.\
-The variable debug must be true if the user wants to see all the images generated during the algorithm. \
-If the variable auto_selection is true the lines hardcoded are used. If it is false the lines must be selected manually from the user.\
-During the line selection phase the user must read the title of each image in order to select lines in appropriate way.\
-There are four methods for Camera Calibration, the user can select the most appropriate (the one with all constraints (the last one) probably is slightly better than the other.\
-In the camera localisation images the left horizontal face is identified with red points, while the right horizontal face with blue points. Points on the vertical faces can be selected through line intersection or through manual selection of points. In both cases points are green.\
-The \
-\
-\'97 MATLAB OUTPUT FILES \'97\
-The folder \'93matlab_output\'94 contains the output data of matlab, generated using the diary function. \
-Files starting with k are the calibration matrices obtained with different constraints:\
-- k.txt is the matrix with only the line at infinity constraints and the homography constraints\
-- k_vp_n.txt is the matrix obtained with only normalised vanishing points orthogonality constraints\
-- k_vp_nn.txt is the same as before but with vanishing points not normalized\
-- k_all.txt is the calibration matrix obtained with all constraints normalised \
-- out.txt contains all the data from a run of the algorithm\
-\
-For more details please refer to the documentation.\
-\
-\'97 DOCUMENTATION \'97\
-Documentation files are inside the folder \'93doc\'94. \
-\
-\'97 REFERENCE \'97\
-The folder \'93reference\'94 contains reference documents useful during the development.\
-\
-\'97 IMGS \'97\
-The folder images contains images generated during the algorithm.\
-- edges is the image with extracted edges\
-}
+— MATLAB SOURCE FILES —
+The main matlab file is “main.m” that contains all the workflow.
+The variable debug must be true if the user wants to see all the images generated during the algorithm. 
+If the variable auto_selection is true the lines hardcoded are used. If it is false the lines must be selected manually from the user.
+During the line selection phase the user must read the title of each image in order to select lines in appropriate way.
+There are four methods for Camera Calibration, the user can select the most appropriate (the one with all constraints (the last one) probably is slightly better than the other.
+In the camera localisation images the left horizontal face is identified with red points, while the right horizontal face with blue points. Points on the vertical faces can be selected through line intersection or through manual selection of points. In both cases points are green.
+The 
+
+— MATLAB OUTPUT FILES —
+The folder “matlab_output” contains the output data of matlab, generated using the diary function. 
+Files starting with k are the calibration matrices obtained with different constraints:
+- k.txt is the matrix with only the line at infinity constraints and the homography constraints
+- k_vp_n.txt is the matrix obtained with only normalised vanishing points orthogonality constraints
+- k_vp_nn.txt is the same as before but with vanishing points not normalized
+- k_all.txt is the calibration matrix obtained with all constraints normalised 
+- out.txt contains all the data from a run of the algorithm
+
+For more details please refer to the documentation.
+
+— DOCUMENTATION —
+Documentation files are inside the folder “doc”. 
+
+— REFERENCE —
+The folder “reference” contains reference documents useful during the development.
+
+— IMGS —
+The folder images contains images generated during the algorithm.
+- edges is the image with extracted edges
