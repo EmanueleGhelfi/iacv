@@ -1,0 +1,695 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex
+\graphicspath{ {../../imgs/} }
+		
+\usepackage{amssymb}
+\usepackage{pst-node}
+\usepackage{tikz-cd} 
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{subfig}
+\usepackage{verbatim}
+\usetikzlibrary{positioning}
+\usepackage{hyperref}
+\usepackage{authblk}
+
+
+\makeatletter
+\g@addto@macro\@floatboxreset\centering
+\makeatother
+
+%SetFonts
+
+%SetFonts
+
+
+\title{IACV Homework}
+\author{Emanuele Ghelfi}
+\affil{Politecnico di Milano}
+%\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\pagebreak
+\tableofcontents
+\pagebreak
+\section{Introduction}
+A bandoneon is a musical instrument, consisting in two rigid wooden parts connected by a deformable bellow. The assignment is to reconstruct the bandoneon shape from a single image of it, using additional information.
+In the given image (Figure \ref{inputimg}), the bandoneon is placed on a horizontal floor. Four rectangular faces are visible in the image: two coplanar horizontal faces, and two non-coplanar vertical faces. The long side of the horizontal faces is 243 mm, and it is slightly longer than the long side of the vertical face.
+For each horizontal face, two groups of parallel lines can easily be identified. The two groups of lines are mutually perpendicular. One of the (short) lines on each horizontal face is also common to a vertical face. Part of the horizontal floor is also visible: we can assume to see groups of parallel lines (the groups are also mutually orthogonal): These lines can be used to help in robustly find, e.g., the image of the horizontal vanishing line (i.e. the image of the line at the infinity of the horizontal plane). We can NOT assume square patterns on the floor.
+In addition, the long lines in the vertical faces are vertical (i.e. orthogonal both to the horizontal faces and to the floor).
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{Input_image.jpeg}
+\caption{Input Image}
+\label{inputimg}
+\end{figure}
+
+\section{Line Extraction}
+\textbf{Use the learned techniques to find edges and lines in the image. Then manually select those lines which are useful for the subsequent steps.} \hfill \break
+The first step is image feature extraction and selection. 
+Lines are extracted using the following steps:
+\begin{itemize}
+\item Edge detection with Canny
+\item Line detection using Hough
+
+\end{itemize}
+
+\subsection{Canny} 
+The canny algorithm is based on 3 steps:
+
+\begin{itemize}
+\item Convolution with derivative of Gaussian before computing image derivatives
+\item Non-maximum Suppression
+\item Hysteresis Thresholding
+\end{itemize}
+
+The threshold parameters found for Canny are the result of many experiments. The threshold is important since too many edges cause the Hough transform to fail considering useless lines.
+
+The processed image with extracted edges is shown in figure \ref{edge}.
+
+\begin{figure}
+
+\includegraphics[width=0.8\linewidth]{edges.jpg}
+
+\caption{Edge detection through Canny}
+\label{edge}
+
+\end{figure}
+
+\subsection{Hough Transform} 
+The Hough transform is designed to detect lines, using the parametric representation of a line:
+
+$$rho = x*cos(\theta) + y*sin(\theta) $$
+
+Each individual datum (edge $x_i$) votes for all the model compatible with him ( $f(m,x_i) = 0 $).
+
+Steps:
+
+\begin{itemize}
+\item Discretize model space. Set the number of votes for each model = 0
+\item For each datum computes the hough transform $H(x_i)$
+\item Let $x_i$ vote for each cell of the hough space crossed by $H$
+\item Selects the local maxima in the hough space
+\item Apply a threshold to the number of votes.
+\end{itemize}
+
+The result of the application of the Hough Transform for line detection is shown in figure \ref{hough}.
+
+In order to obtain more lines two hough transforms with different parameters have been used and only the best lines have been selected.
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{lines.jpg}
+
+\caption{Line detection through Hough}
+\label{hough}
+\end{figure}
+
+\section{Shape Reconstruction}
+\textbf{Using constraints on the horizontal lines, and their images, reconstruct the shape of the horizontal faces, and determine their relative position and orientation.} \hfill \break
+A stratified approach to the shape reconstruction problem has been used. The idea is to pass through two transformations, then the reconstructive transformation is the composition of the two transformations. 
+
+\begin{tikzpicture}[rounded corners=2pt,inner sep=5pt,node distance=0.8cm]
+\node [draw](scene) at (0,0) {\textit{Scene}};
+\node [draw,right=of scene] (image) at (2,3) {\textit{Image}};
+\node [draw,right=of image] (affine) at (5,3){\textit{Affine Reconstruction}};
+\node [draw,right=of affine] (euclidean) at (10,0) {\textit{Euclidean Reconstruction}};
+\path[every node/.style={sloped,anchor=south,auto=false}]
+ (scene) edge node {$H_p$} (image)
+ (image) edge node {$H_{r\_aff}$}  (affine)
+ (scene) edge node {$H_{a}$} (affine)
+ (affine) edge node {$H_{a\_e}$}  (euclidean)
+ (scene) edge node {$H_{sim}$}  (euclidean);
+\end{tikzpicture}
+
+The first step is to compute $H_{r\_aff}$ that maps the image to an affine reconstruction with respect to the real scene. Then, from the affine reconstruction compute the mapping $H_{a\_e}$ that maps the affinity to a euclidean reconstruction with respect to the real scene. A two-step approach increases the robustness of the shape reconstruction avoiding non-linear constraints. 
+
+\subsection{Affine Rectification}
+An affine transformation is a non-singular linear transformation followed by a translation.
+Its matrix representation is the following:
+\begin{equation}
+\begin{bmatrix}
+x' \\ y' \\ z' 
+\end{bmatrix}
+= 
+\begin{bmatrix}
+a_{11} & a_{12} & t_x \\ a_{21} & a_{22} & t_y  \\ 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ 1
+\end{bmatrix}
+\end{equation}
+Because an affine transformation includes non-isotropic scaling, the similarity invariants of length ratios and angles between lines are not preserved under an affinity.
+Invariants of an affinity are:
+\begin{itemize}
+\item Parallel lines. An affine transformation maps points at infinity to points  at infinity. Consequently, the parallel lines are mapped to lines which still intersect at infinity, and so are parallel after the transformation.
+\item Ratio of lengths of parallel segments
+\item Ratio of ares
+\end{itemize}
+
+In order to perform affine rectification we require that the line at infinite in the image is mapped back to itself ($l_{\infty} = (0,0,1)^{T}$).
+So we first perform the identification of the imaged line at infinite through LSA using n couples of imaged parallel lines. 
+Once found the image of the line at infinite the reconstruction matrix that rectifies the image it's simply:
+
+\begin{equation}
+H_{r\_aff} =\begin{bmatrix} 
+1& 0 & 0 \\
+0 &  1 & 0 \\
+l_1 &  l_2 & l_3 \\
+\end{bmatrix}
+\end{equation}
+
+So the last row is the imaged line at infinite [pag 49 Multiple View Geometry in computer vision].
+
+The result of the affine rectification on the input image is in figure  {\ref{affine}}.
+
+It's possible to see that parallel lines are now parallel, even if angles do not show their real value.
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{affine_rectification.jpg}
+\caption{Affine rectification}
+\label{affine}
+\end{figure}
+
+\subsection{Euclidean Rectification} \label{seceucl}
+A similarity transformation (or more simply a similarity) is an isometry composed with an isotropic scaling. In the case of a Euclidean transformation composed with a scaling (i.e. no reflection) the similarity has matrix representation:
+\begin{equation}
+\begin{bmatrix}
+x' \\ y' \\ z'
+\end{bmatrix}
+=
+\begin{bmatrix}
+s \cos\theta & - s \sin\theta & t_x \\ s \sin\theta & s \cos\theta & t_y \\ 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ 1
+\end{bmatrix}
+\end{equation}
+
+where the scalar s represents the isotropic scaling.
+A similarity transformation preserves the shape of objects.
+Invariants:
+\begin{itemize}
+\item Angles between lines (and parallel lines)
+\item Ratio of lengths
+\item Ratio of areas
+\end{itemize}
+
+Once the image has been affinely rectified we have obtained an image such that the transformation from the original scene is an affine transformation.
+The image of the dual conic corresponding to circular points can be obtained as:
+\begin{subequations} \label{shapereceq}
+\begin{align}
+C^*_{\infty}{'} & = H_a C^*_{\infty} H_a^t  \\
+C^*_{\infty}{'} & = \begin{bmatrix} 
+a_{11}^{2} & a_{12}*a_{21} & 0 \\
+ a_{12}*a_{21} &  a_{22}^{2}  & 0 \\
+0 &  0 & 0 \\
+\end{bmatrix} \\
+ C^*_{\infty}  & = H_a ^{-1} C^*_{\infty}{'} H_a ^{-t}
+\end{align}
+\end{subequations}
+Notice that the upper left part of $C^*_{\infty}{'} $ is a symmetric matrix and homogeneous, so it has only 2 DOF.
+We can use two pair of orthogonal lines, $l$ and $m$, to determine its parameters using equation \ref{coseq}.
+\begin{subequations} \label{coseq}
+\begin{align}
+\cos(\theta) & = \frac{l_1 m_1 + l_2  m_2}{\sqrt{(l_1^2 + l_2^2)(m_1^2 + l_2 ^2)}}  \\
+\cos(\theta) & = \frac{l C^*_{\infty} m} {\sqrt{(l^t C^*_{\infty} l) (m^t C^*_{\infty} m)}} \\
+\cos(\theta) & = \frac{l' C^{*}_{\infty}{'} m'} {\sqrt{(l^{'t} C^{*}_{\infty}{'} l') (m^{'t} C^{*}_{\infty}{'} m')}}
+\end{align}
+\end{subequations}
+That, in the case of orthogonal lines, becomes a linear constraint on $C^{*}_{\infty}{'}$.
+
+The matrix $H_a$ in equation \ref{shapereceq} is the transformation matrix from the real scene to the image, so the matrix $H_a^{-1}$ is the matrix that maps the image to a similarity with respect to the real scene since the matrix $C^*_{\infty} $ is mapped back to its value.
+
+Once found $C^*_{\infty}{'}$ we can use standard cholesky (or SVD) to determine $H_a$:
+$$
+svd(C^*_{\infty}{'}) = USV^{t} = H_a C^*_{\infty} H_a^t 
+$$
+Where $H_a = U$.
+Since SVD does not return the matrix S ($C_{\infty}^*$) as 
+$$C_{\infty}^* = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0  & 0 & 0\end{bmatrix} $$
+that is required by the algorithm, it's possible to factorize the matrix S returned by SVD through the following decomposition:
+
+\begin{subequations}
+\begin{align*}
+S & = S_{fact} C_{\infty}^* S_{fact} \\
+S & = \begin{bmatrix} \sqrt{S_{11}} & 0& 0 \\ 0 & \sqrt{S_{22}}  & 0   \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 && \\&1&\\&&0\end{bmatrix} \begin{bmatrix} \sqrt{S_{11}} & 0& 0 \\ 0 & \sqrt{S_{22}} & 0   \\ 0 & 0 & 1 \end{bmatrix} 
+\end{align*}
+\end{subequations}
+
+Doing in this way the factorization of $C^*_{\infty}{'}$ becomes:
+
+$$
+C^*_{\infty}{'} = USV^{t} = U S_{fact} C_{\infty}^* S_{fact} V^{t} = H_a C^*_{\infty} H_a^t 
+$$
+
+In this way the matrix $H_a$ becomes:
+$$
+H_a = U S_{fact}
+$$
+Renaming the matrix $H_a^{-1}$ as $H$  the overall transformation ($H_r$, reconstructive matrix) that maps the image to a similarity is the composition of the two transformation:
+$$
+H_r = H H_{r\_aff} 
+$$
+
+The final result of the shape reconstruction phase for the two upper faces is showed in figure \ref{shaperec}.
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{shape_rec_rotated.jpg}
+\caption{Shape reconstruction}
+\label{shaperec}
+\end{figure}
+
+\section {Measure of Metric Properties} \label{metricprop}
+Once we have reconstructed the shape of the object, metric properties can be determined, like angles, since they are invariants of a similarity transformation.
+
+The relative orientation between the horizontal upper faces can be determined using the cosine between the two (transformed) lines representing corresponding lines in each face. We need to transform original lines according to the transformation $H_r$:
+$$
+l' = H_r^{-t}l
+$$
+
+Given two corresponding lines in each faces the cosine between them can be determined using equations \ref{coseq}.
+
+The relative position can be determined simply by computing the difference between the origin of the two reference frames and multiplying by the scaling factor.
+The scaling factor can be determined by doing the ratio between the length of the longside of the horizontal face and the length in the image of the corresponding side.
+The relative position estimated as before gives us the relative position in the reference frame of the image. If we want the position of the right face with respect to the left face in the reference frame of the left face we need to multiply the rotation matrix of the reference frame of the left face and the vector of the relative positions:
+$$
+relative\_pose\_from\_left\_to\_right = R_{from\_img\_to\_left} * relative\_coordinates
+$$
+\section{Camera Calibration} \label{seccalib}
+\textbf{Using also the images of vertical lines, calibrate the camera (i.e., determine the calibration matrix K) assuming it is zero-skew (but not assuming it is natural).} \hfill \break
+
+Camera calibration is determining the matrix K of the intrinsic parameters of the camera:
+
+\begin{equation} \label{keq}
+K =
+\begin{bmatrix}
+f_x  && 0 && u_0 \\ 0 && f_y && v_0 \\ 0 && 0 && 1
+\end{bmatrix}
+\end{equation}
+
+P is the projection matrix that maps 3d points (X) of the world to points in the image (x) through the relation:
+\begin{equation} \label{peq1}
+x = P X
+\end{equation}
+Where P is the matrix:
+\begin{equation} \label{peq}
+P=[KR | -KRo]
+\end{equation}
+In equation \ref{peq}, R is the rotation between the camera and the world (represents the rotation of the world with respect to the camera reference frame) and o is the location of the camera in the world reference frame in cartesian coordinates.
+
+K is related to $\omega$ through the following equation:
+
+$$
+\omega = (KK^t)^{-1}
+$$
+
+In order to determine K we need to specify some constraints on $\omega$ (the image of the absolute conic).
+
+For a zero skew camera the image of the absolute conic is given by:
+
+\begin{equation} \label{omegaeq}
+\omega = 
+\begin{bmatrix}
+\alpha^2 && 0 && -u_0 \alpha^2 \\ 0 && 1 && -v_0 \\  -u_0 \alpha^2 && -v_0 && f_y^2 +\alpha^2 u_0^2 + v_0^2
+\end{bmatrix}
+\end{equation}
+That is a symmetric matrix with 4 DOF, so we need 4 constraints on $\omega$.
+Here we can use the homography method (p 211 Multiple View Geometry in Computer Vision) adapted with the reconstructive transformation (that we have found in the previous point) on the horizontal faces.
+
+\begin{itemize}
+\item For each horizontal face we can compute the transformation that maps its corner points to their imaged points ($H_r^{-1}$ since $H_r$ maps the image point to their real shape).
+\item We can compute the imaged circular points for the plane of that face as $H_r \; [1,\pm i, 0]^t$. Writing $H_r = [h_1, h_2, h_3] $, the imaged circular points are $h_1 \pm ih_2 $.
+\item This gives us two constraints on the image of the absolute conic since the circular points lie on $\omega$:
+
+   \begin{subequations} \label{heq}
+   \begin{align*}
+   & h_1^T\omega h_2= 0 \\ 
+   & h_1^T\omega h_1= h_2^T\omega h_2 
+   \end{align*}
+   \end{subequations}
+   Which are linear equations in $\omega$.
+
+\end{itemize}
+Other constraints that can be used are the constraints deriving from the fact that the line at infinity on the horizontal plane is orthogonal with respect to the vanishing point of the vertical direction on the vertical faces:
+\begin{equation} \label{linfeq}
+[l_{inf}]_\times\omega v_p = 0
+\end{equation} 
+
+Where $[l_{inf}]_\times$ is the vector product matrix of $l_{inf}$.
+In order to determine the vanishing point of the vertical direction we can use a least square approximation using all vertical lines on the vertical face.
+More constraints can be determined from the orthogonality of vanishing points. Given $v_{p1}$ and $v_{p2}$, vanishing points of orthogonal directions we obtain:
+\begin{equation} \label{vpeq}
+v_{p1}^T \omega v_{p2} = 0 
+\end{equation}
+Once having determined $\omega$ it's possible to obtain the calibration matrix K using the parametrization in equation \ref{omegaeq}. 
+
+\section{Localization}
+\textbf{ Localize the camera with respect to (both) horizontal faces. From the image of the (short) horizontal segments common to a horizontal face and its neighboring vertical face, reconstruct the shape of the vertical faces.} \hfill \break
+In this point we have to find the relative position of the camera with respect to the reference frame placed on the horizontal faces.
+
+This is possible knowing the shape of the horizontal faces, knowing the size, knowing the image and knowing K.
+
+If we identify the plane of the left horizontal face with $\pi$ we can write the position of a point in the world reference frame as $ X_w =[R_{\pi} | o_{\pi}]X_{\pi} $ where $X_{\pi} $ is the position of the point in the plane reference frame. 
+The plane reference frame has the x axis identical to the line at the bottom of the face, going right, the y axis with the same direction of the left line and the z axis orthogonal to both axis using the right hand rule.
+In this way a point on the plane can be written (in homogeneous coordinates) as:
+$$
+X_\pi = \begin{bmatrix}
+x \\
+y \\
+0 \\
+w
+\end{bmatrix}
+$$
+Using equations \ref{peq1} and \ref{peq} we obtain:
+
+$$
+u = [KR | -KRo] [R_{\pi} | o_{\pi}]X_{pi}
+$$
+
+By putting the world reference frame on the camera ($R=I$ and $o=[0 \ 0\ 0]'$):
+
+\begin{subequations}
+\begin{align*}
+u  & = [K|\underline{\mathbf{0}}]
+\begin{bmatrix}
+i_\pi && j_\pi && o_\pi \\
+0 && 0 && 1
+\end{bmatrix} \begin{bmatrix}
+x \\ y \\ w
+\end{bmatrix} \\
+u & = K [i_\pi | j_\pi | o_\pi] x
+\end{align*}
+\end{subequations}
+Where x are the coordinates of the point on the plane. 
+By inspection we can identify $K [i_\pi | j_\pi | o_\pi] = H_omog$ as the matrix that maps the real points to the image. H is known since the shape of horizontal face is known and also its size.
+
+So we obtain:
+
+$$[i_\pi | j_\pi | o_\pi]= K^{-1}H_{omog} $$
+
+Where $H_{omog}$ is the transformation mapping world points to image point. 
+
+$H_{omog}$ it's easy to find since knowing the shape it's the transformation that maps the shape of the horizontal face to the image. 
+
+A few more steps are needed once found the matrix $H_{omog} = [h_1\; |\; h_2\; |\; h_3]$. 
+
+The matrix $R=[i_\pi\; | \; j_\pi \; | \; k_\pi]$ (rotation of the plane with respect to the camera) can be found using these equations:
+
+\begin{subequations}
+\begin{align*}
+\lambda &= \frac{1}{|K^{-1}h_1|} \\
+i_\pi &= K^{-1}h_1\lambda \\
+j_\pi &= K^{-1}h_2\lambda \\
+k_\pi &= i_\pi \times j_\pi  \\
+o_\pi &= K^{-1} h_3 \lambda
+\end{align*}
+\end{subequations}
+
+Due to noise in the data R may be not a true rotation matrix, it's possible to approximate it through SVD, obtaining an orthogonal matrix:
+
+\begin{subequations}
+\begin{align*}
+[U,\; \_\;,\;V] &= svd(R) \\
+\hat{R} &= UV
+\end{align*}
+\end{subequations}
+
+The result of the camera localization phase is shown in figure \ref{left_loc}.
+
+\begin{figure}
+ \centering
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_l.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_l2.jpg} }}%
+    \caption{Camera Localization from left face}%
+    \label{left_loc}%
+\end{figure}
+
+The rotation of the right plane can be found simply by applying the rotation found in section \ref{metricprop}.
+
+
+$$
+R_{right} = \hat{R}R_{l->r}
+$$
+Where $R_{l->r}$ is the rotation matrix that represent the reference frame of the right face in the reference frame of the left face.
+In figures \ref{left_loc}, \ref{right_loc} \ref{general_loc} the camera is represented in red while the points on the horizontal plane represent the coordinate of the extreme points of the faces. Red dots are the extreme points of the left face while blue dots are the extreme points of the right face. 
+
+\begin{figure}
+ \centering
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_r.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_r2.jpg} }}%
+    \caption{Camera Localization from right face}%
+    \label{right_loc}%
+\end{figure}
+
+\begin{figure}
+ \centering
+    \subfloat{{\includegraphics[width=5cm]{cam_loc.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=5cm]{cam_loc2.jpg} }}%
+    \caption{Camera Localization from both face}%
+    \label{general_loc}%
+\end{figure}
+
+\section{Shape Reconstruction Vertical Faces }
+For the shape reconstruction of vertical faces we can use the result of the localization, namely the matrix $\hat{R}$, the rotation of the plane with respect to the camera.
+If we put the world reference frame on the horizontal face we obtain the following matrix P:
+$$ P = [K \hat{R} \  | \ o_\pi ] $$
+The reference frame of the vertical face it's the same of the horizontal face, a point on the vertical face (reference frame $\pi'$) has always $y=0$: $X_{\pi'} = [x \ \ 0 \ \ z \ \  w]^t$.
+The matrix P maps the point on the vertical face to image points so we can directly use the matrix $ H_{vert\_sr} = [p_1 \; |\; p_3 \;|\; p_4]^{-1}$ to reconstruct the shape of the vertical left face.
+The reconstruction of the vertical right face can be performed in the same way using the matrix $R_{right}$ as $\hat{R}$.
+The reconstructed  vertical faces are shown in figure \ref{verticalshaperec}.
+
+\begin{figure}
+ \centering
+    \subfloat{{\includegraphics[width=5cm]{vertical_face_left.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=5cm]{vertical_face_right.jpg} }}%
+    \caption{Shape Reconstruction of the vertical faces}%
+    \label{verticalshaperec}%
+\end{figure}
+
+\section{3D Shape Reconstruction}
+Once obtained the real shape of the vertical faces it's possible to reconstruct the 3D shape of the object, that is determination of shape and scale.
+
+In order to obtain the position (in the world) of an image point ($\underline{x}_{image}$ on the left vertical face with respect to the reference frame on the left horizontal face is possible to proceed in this way:
+$$
+\begin{bmatrix}
+x \\
+z \\
+w
+\end{bmatrix}_{\pi} = H_{vert\_sr} \; \underline{x}_{image}
+$$
+
+The position on a image point on the right vertical face is not as easy, since $H_{vert\_sr\_r}$ maps an image point to its position in the reference frame $\pi'$, so we need to add the transformation from $\pi'$ to $\pi$:
+\begin{subequations}
+\begin{align*}
+\begin{bmatrix}
+x \\
+z \\
+w
+\end{bmatrix}_{\pi'} & = H_{vert\_sr\_r} \; \underline{x}_{image} \\
+\begin{bmatrix}
+x \\
+y \\
+z \\
+w
+\end{bmatrix}_{\pi} & = relative\_pose\_from\_left\_to\_right + R_{l->r} \begin{bmatrix}
+x \\
+0 \\
+z \\
+w
+\end{bmatrix}_{\pi'}
+\end{align*}
+\end{subequations}
+Using these relations the position of the extreme points of the vertical faces can be determined, the result is shown in figure \ref{3d_sr}.
+
+\begin{figure}
+ \centering
+    \subfloat{{\includegraphics[width=7cm]{3d_shape_rec.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{3d_shape_rec2.jpg} }}%
+    \caption{3D shape reconstruction}%
+    \label{3d_sr}%
+\end{figure}
+
+Green points are points on the vertical faces, red point and blue points are points on the left and right horizontal faces, respectively.
+
+\section{Implementation Details}
+In this section implementation details are explained.
+\subsection{Fitting Vanishing Point} \label{secvp}
+Vanishing points are fitted using a Least Square Approximation.
+A vanishing point is a point common to all line having the same direction. 
+Considering the line $l$ as data and the vanishing point $v$ as model:
+\begin{subequations}
+\begin{align*}
+f(l,v)&=0 \\
+l'v &= 0
+\end{align*}
+\end{subequations}
+
+Considering the vanishing point with 2DOF ($v_3=1$), the equation becomes:
+
+$$
+l_1 v_1 + l_2 v_2 = -l_3
+$$
+
+It's possible to rephrase this in a model fitting framework using these matrices:
+$$
+X = \begin{bmatrix}
+l_{11} && l_{21} \\
+\vdots  && \vdots\\
+l_{1n} && l_{2n}
+\end{bmatrix}
+$$ 
+
+$$
+W = 
+\begin{bmatrix}
+v_1 \\
+v_2
+\end{bmatrix}
+$$
+
+$$
+Y =
+\begin{bmatrix}
+-l_{31} \\
+\vdots \\
+-l_{3n}
+\end{bmatrix}
+$$
+The solution ($W$) minimizing the error ($E = |Y-XW|^2$) is then found simply using:
+
+$$
+W = (X'X)^{-1}(X'Y)
+$$
+
+\subsection{Fitting Line at Infinity}
+The line at infinity on the horizontal face is extracted using these steps:
+\begin{itemize}
+\item Vanishing point extraction using lines on the horizontal faces and on the ground. 
+\item Line fitting using Least Square Approximation.
+\end{itemize}
+
+Given a set of points the line passing through all points can be fitted considering two ways: normal LS or total LS.
+In normal LS the objective function is:
+
+$$
+min  \sum_i (y_i - m x_i - b)^2
+$$
+
+Where the line is parametrized as $y = mx + b$ So the objective is to minimize the sum vertical distances from to points to the line.
+This can be easily solved using the same approach as in section \ref{secvp}.
+The limitations is that this method is not rotation invariant and fails completely with vertical lines.
+The total LS recover this problem using another parametrization of the line ($ax + by = d$) and another error measure: the sum of perpendicular distances from the points to the line:
+
+\begin{subequations}
+\begin{align*}
+& min \ \sum_i (ax_i + by_i - d)^2 \\
+& s.t. \ a^2 + b^2 = 1
+\end{align*}
+\end{subequations}
+
+The problem can be rewritten as a quadratic constrained minimization problem:
+
+ \begin{subequations}
+\begin{align*}
+& min \ ||A'Ah|| \\
+& s.t. \ ||h|| = 1
+\end{align*}
+\end{subequations}
+
+Where the matrix $A$ has in each row: $[x_i - \bar{x} \ , \ y_i - \bar{y}]$. 
+This can be solved by considering as h the eigenvector corresponding to the smallest eigenvalue of $A'A$, that is the last column of V in the svd decomposition. 
+In the homework these two methods give similar result regarding the extraction of the line at infinity.
+
+\subsection{Fitting Conics}
+
+The image of the dual conics corresponding to vanishing point in section \ref{seceucl} and the image of the absolute conic in section \ref{seccalib} are fitted using a LSA over constraints.
+Regarding the image of the absolute conic in section \ref{seccalib} different constraints set has been used, generating different conics. For mixing different constraints we need to make the matrix $X$ well scaled, otherwise we can obtain an inaccurate solution. 
+Using a well scaled matrix gives similar result using different constraints set. 
+These are the $K$ matrix obtained along with the constraints set used:
+\begin{itemize}
+\item Using constraints \ref{linfeq} and \ref{heq}:
+\verbatiminput{../../matlab_output/k.txt} %a % a is for making texmaker stop coloring orange the text
+\item Using only vanishing points (constraints like equation \ref{vpeq}) normalized with the scaling matrix:
+$$
+H_{scaling} = \begin{bmatrix}
+\frac{1}{MAX\_SIZE} && && \\
+&& \frac{1}{MAX\_SIZE} &&  \\
+&& && 1
+\end{bmatrix}
+$$
+\verbatiminput{../../matlab_output/k_vp_n.txt} %a 
+\item Using only vanishing points not normalized:
+\verbatiminput{../../matlab_output/k_vp_nn.txt} %a
+\item Using all the constraints:
+\verbatiminput{../../matlab_output/k_all.txt} %a 
+\end{itemize}
+
+The scaling matrix $H_{scaling}$ has on the first two elements on the diagonal the inverse of the maximum size of the image. In this way both the axis corresponding to the maximum size is in the range [0,1] wile the smaller axis is in the range [0,Aspect\_ratio].
+All the matrices are very similar, in all the matrices the $\alpha$ factor is near 1, so the camera is almost natural. The $u_0$ and $v_0$ factors are near the image center, that is acceptable.  
+
+\section{Results Analysis}
+A simple test on the pinhole model obtained from the camera localization and calibration phase could be the reconstruction of the horizontal plane using $P$.
+Since $P$ maps points on the world to image points it's possible to extract from $P$ the reconstructive transformation from the image to a similarity with respect to the horizontal plane.
+By using as reference frame the one found before (the left horizontal face), a point on the horizontal face can be written as $\underline{x} = [ x \; y \; 0 \; w]^t$:
+\begin{subequations}
+\begin{align*}
+\underline{x}_{image} &= P\underline{x}  \\
+\underline{x}_{image} &= P\begin{bmatrix}
+x \\
+y \\
+0 \\
+w
+\end{bmatrix} \\
+\underline{x}_{image} &= [p_1 \; | \; p_2 \; | \; p_4] \begin{bmatrix}
+x \\
+y \\
+w
+\end{bmatrix} \\
+\begin{bmatrix}
+x \\
+y \\
+w
+\end{bmatrix} &= [p_1 \; |\; p_2\; |\; p_4]^{-1} \underline{x}_{image}
+\end{align*}
+\end{subequations}
+If the pinhole model found is good the reconstructed image using $[p_1 \; |\; p_2\; |\; p_4]^{-1}$ should be similar to image \ref{shaperec}.
+The result of the reconstruction is shown in figure \ref{hor_sr}.
+The figure on the left is the reconstruction using the pinhole model with the reference frame of the world on the left horizontal face while the reconstruction on the right uses as reference frame of the world the right face.
+
+\begin{figure}
+ \centering
+    \subfloat{{\includegraphics[width=5cm]{hor_sr_l_using_P.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=5cm]{hor_sr_r_using_P.jpg} }}%
+    \caption{Shape Reconstruction of the horizontal faces using P}%
+    \label{hor_sr}%
+\end{figure}
+Measures of segments are a bit different from their real measures, this can be due to numerical errors or errors in measurements on the reconstructed images.
+Despite small errors the reconstructed shape is satisfactory, this means that the pinhole model is quite good.
+ 
+\section{Computed Results}
+ 
+\verbatiminput{../../matlab_output/out.txt} %a
+
+Where $relative\_pose\_from\_left\_to\_right$ is the distance (in mm) from the origin of the left face to the right face. The origin of the left face is the intersection of lines 15 and 1 and the origin of the right face is the intersection of lines 72 and 76.
+From the camera localization the camera height is about 29 cm above the horizontal faces. 
+Negative numbers on the vert\_points' z axis means that they are above the horizontal faces. The height of the vertical faces is around 21 cm, this means that it's slightly smaller than the longside of the horizontal face. 
+ \section{References}
+ \begin{itemize}
+ \item Image Analysis and Computer Vision course Polimi 2017/2018
+ \item Multiple View Geometry in Computer Vision (Hartley, Zisserman)
+ \item A Flexible new Technique for Camera Calibration (Zhang)
+ \end{itemize}
+
+\end{document}  

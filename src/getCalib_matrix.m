@@ -59,32 +59,42 @@ for ii = 1:size(vp1s,2)
 
 end
 
-% cast equations into matrix form
-[A,y] = equationsToMatrix(eqn,[a,b,c,d]);
-% concatenate matrices
-%X = [X;double(A)];
-%Y = [Y;double(y)];
+if size(eqn,2)>0
+    % cast equations into matrix form
+    [A,y] = equationsToMatrix(eqn,[a,b,c,d]);
+    % concatenate matrices
+    X = [X;double(A)];
+    Y = [Y;double(y)];
+end
 
 % add constraints on homography
+if size(H)>0
+    % scaling factor needed in order to get an homogeneous matrix
+    % get columns
+    h1 = H(:,1);
+    h2 = H(:,2);
 
-% get columns
-h1 = H(:,1);
-h2 = H(:,2);
+    % first constraint: h1' w h2 = 0
+    eq1 = h1.' * omega * h2 == 0;
+    % second equation h1'wh1 = h2' w h2
+    eq2 = h1.' * omega * h1 == h2.' * omega * h2;
 
-% first constraint: h1' w h2 = 0
-eq1 = h1.' * omega * h2 == 0;
-% second equation h1'wh1 = h2' w h2
-eq2 = h1.' * omega * h1 == h2.' * omega * h2;
+    [A,y] = equationsToMatrix([eq1,eq2],[a,b,c,d]);
+    A = double(A);
+    y = double(y);
 
-[A,y] = equationsToMatrix([eq1,eq2],[a,b,c,d]);
-A = double(A);
-y = double(y);
+    % concatenate matrices
+    X = [X;A];
+    Y = [Y;y];
+end
+X
+Y
+% fit a linear model without intercept
+lm = fitlm(X,Y, 'y ~ x1 + x2 + x3 + x4 - 1')
+% get the coefficients
+W = lm.Coefficients.Estimate
 
-% concatenate matrices
-X = [X;A];
-Y = [Y;y];
-
-W = X.'*X \ (X.'*Y);
+%W = X.'*X \ (X.'*Y)
 % image of absolute conic
 IAC = double([W(1,1) 0 W(2,1); 0 1 W(3,1); W(2,1) W(3,1) W(4,1)]);
 

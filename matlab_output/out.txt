@@ -1,0 +1,156 @@
+Horizontal Vanishing Line
+
+l_inf_prime =
+
+   0.000043143973982
+   0.000697947637111
+   1.000000000000000
+
+Angle from left to right horizontal face
+
+theta =
+
+  57.087157363489169
+
+Rotation matrix from left to right. This is the rotation of the right
+Reference frame in the left reference frame.
+
+R_from_left_to_right =
+
+   0.543362633983245   0.839498092904797                   0
+  -0.839498092904797   0.543362633983245                   0
+                   0                   0   1.000000000000000
+
+Position of the right reference frame in the left reference frame
+
+relative_pose_from_left_to_right =
+
+   1.0e+02 *
+
+   1.853883835850114
+  -0.667861096818124
+                   0
+
+Camera Intrinsic Parameters
+
+K =
+
+   1.0e+03 *
+
+   3.327516509370050                   0   2.100856628676403
+                   0   3.399949644133486   1.682536922340478
+                   0                   0   0.001000000000000
+
+
+fx =
+
+     3.327516509370050e+03
+
+
+fy =
+
+     3.399949644133486e+03
+
+
+alfa =
+
+   0.978695821307702
+
+
+u0 =
+
+     2.100856628676403e+03
+
+
+v0 =
+
+     1.682536922340478e+03
+
+Rotation of the left face in the camera frame
+
+R =
+
+   0.878572476320691  -0.475699162684000  -0.042669784080417
+  -0.355103489978936  -0.590863747207724  -0.724418072414284
+   0.319393041966332   0.651605969016083  -0.688039058401559
+
+Position of the left face in the camera frame
+
+T =
+
+   1.0e+02 *
+
+  -1.029171696730963
+   0.528455399488923
+   3.783697597007948
+
+Rotation of the camera in the frame of the left horizontal face
+
+cameraRotation =
+
+   0.878572476320691  -0.355103489978936   0.319393041966332
+  -0.475699162684000  -0.590863747207724   0.651605969016083
+  -0.042669784080417  -0.724418072414284  -0.688039058401559
+
+3D Position of the camera in the frame of the left horizontal face
+
+cameraPosition =
+
+   1.0e+02 *
+
+  -0.116628402576252
+  -2.642810915981000
+   2.942239839695089
+
+Rotation of the right face in the camera frame
+
+R_from_cam_to_right_plane =
+
+   0.876731994748419   0.479082768330263  -0.042669784080417
+   0.303079021295868  -0.619161984629154  -0.724418072414284
+  -0.373475723755637   0.622188185261582  -0.688039058401559
+
+Position of the right face in the camera frame
+
+T_from_cam_to_right_plane =
+
+   1.0e+02 *
+
+   0.917300580288374
+   0.264749689643228
+   3.940632917632010
+
+Rotation of the camera in the frame of the right horizontal face
+
+camera_orientation_wrt_right =
+
+   0.876731994748419   0.303079021295868  -0.373475723755637
+   0.479082768330263  -0.619161984629154   0.622188185261582
+  -0.042669784080417  -0.724418072414284  -0.688039058401559
+
+Position of the camera in the frame of the left horizontal face
+
+cameraPos_wrt_right =
+
+   1.0e+02 *
+
+   0.587263886602338
+  -2.727355201929570
+   2.942239839695089
+
+3d coordinates of the points on the vertical faces. First four points are on the left vertical face.
+The other four are on the right vertical face.
+Coordinates are in the frame of the left horizontal face.
+
+vert_points =
+
+   1.0e+02 *
+
+   0.015414201042978                   0   0.019170226246530
+   0.016678879198411                   0  -2.082483315996573
+   0.568770513884049                   0  -2.078203725292395
+   0.567257454649088                   0   0.003425679758380
+   1.852564469873516  -0.665822669528639  -0.004663160952759
+   1.858600813021336  -0.675148851057844  -2.082725200459683
+   2.150603873877010  -1.126295097375289  -2.119507205189755
+   2.145882756202694  -1.119000946036775  -0.006334383951559
