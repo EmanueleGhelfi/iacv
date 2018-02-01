@@ -18,6 +18,7 @@
 \usetikzlibrary{positioning}
 \usepackage{hyperref}
 \usepackage{authblk}
+\usepackage{float}
 \newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
 
 
@@ -426,9 +427,11 @@ The result of the camera localization phase is shown in figure \ref{left_loc}.
 
 \begin{figure}
  \centering
-    \subfloat{{\includegraphics[width=7cm]{cam_loc_l.jpg} }}%
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_l.jpg} }}%
     \qquad
-    \subfloat{{\includegraphics[width=7cm]{cam_loc_l2.jpg} }}%
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_l2.jpg} }}%
+    \qquad
+     \subfloat{{\includegraphics[width=5cm]{cam_loc_l3.jpg} }}%
     \caption{Camera Localization from left face}%
     \label{left_loc}%
 \end{figure}
@@ -442,20 +445,24 @@ $$
 Where $R_{l->r}$ is the rotation matrix that represent the reference frame of the right face in the reference frame of the left face.
 In figures \ref{left_loc}, \ref{right_loc} \ref{general_loc} the camera is represented in red while the points on the horizontal plane represent the coordinate of the extreme points of the faces. Red dots are the extreme points of the left face while blue dots are the extreme points of the right face. 
 
-\begin{figure}
+\begin{figure}[H]
  \centering
-    \subfloat{{\includegraphics[width=7cm]{cam_loc_r.jpg} }}%
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_r.jpg} }}%
     \qquad
-    \subfloat{{\includegraphics[width=7cm]{cam_loc_r2.jpg} }}%
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_r2.jpg} }}%
+        \qquad
+    \subfloat{{\includegraphics[width=5cm]{cam_loc_r3.jpg} }}%
     \caption{Camera Localization from right face}%
     \label{right_loc}%
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H] 
  \centering
-    \subfloat{{\includegraphics[width=7cm]{cam_loc.jpg} }}%
+    \subfloat{{\includegraphics[width=5cm]{cam_loc.jpg} }}%
     \qquad
-    \subfloat{{\includegraphics[width=7cm]{cam_loc2.jpg} }}%
+    \subfloat{{\includegraphics[width=5cm]{cam_loc2.jpg} }}%
+      \qquad
+    \subfloat{{\includegraphics[width=5cm]{cam_loc3.jpg} }}%
     \caption{Camera Localization from both face}%
     \label{general_loc}%
 \end{figure}
@@ -685,7 +692,18 @@ Despite small errors the reconstructed shape is satisfactory, this means that th
 
 Where $relative\_pose\_from\_left\_to\_right$ is the distance (in mm) from the origin of the left face to the right face. The origin of the left face is the intersection of lines 15 and 1 and the origin of the right face is the intersection of lines 72 and 76.
 From the camera localization the camera height is about 29 cm above the horizontal faces. 
-Negative numbers on the vert\_points' z axis means that they are above the horizontal faces. The height of the vertical faces is around 21 cm, this means that it's slightly smaller than the longside of the horizontal face. 
+Negative numbers on the vert\_points' z coordinates means that they are above the horizontal faces. The height of the vertical faces is around 21 cm, this means that it's slightly smaller than the longside of the horizontal face. 
+These result have been obtained using these lines:
+\begin{figure}[!b]
+
+\includegraphics[width=0.6\linewidth]{used_lines.jpg}
+
+\caption{Lines used in the algorithm}
+
+\end{figure}
+
+\pagebreak
+
  \section{References}
  \begin{itemize}
  \item Image Analysis and Computer Vision course Polimi 2017/2018

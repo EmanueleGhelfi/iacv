@@ -421,6 +421,7 @@ r2 = (K \ h2) * lambda;
 r3 = cross(r1,r2);
 
 % rotation of the world with respect to the camera (R cam -> world)
+% where the world in this case is the left horizontal face
 R = [r1, r2, r3]
 
 % due to noise in the data R may be not a true rotation matrix.
@@ -471,24 +472,24 @@ cameraPos_wrt_right = -R_from_cam_to_right_plane.'*T_from_cam_to_right_plane;
 camera_orientation_wrt_right = R_from_cam_to_right_plane.';
 
 %% Display orientation and location from both faces
-left_square = [[x_ul; x_dl; x_ur; x_dr], zeros(size([x_ul; x_dl; x_ur; x_dr],1), 1)];
+left_face = [[x_ul; x_dl; x_ur; x_dr], zeros(size([x_ul; x_dl; x_ur; x_dr],1), 1)];
 
 % first rotate then add translation
-right_square = left_square;
+right_face = left_face;
 
-right_square = [R_from_left_to_right*right_square(1,:).', R_from_left_to_right*right_square(2,:).' , R_from_left_to_right*right_square(3,:).', R_from_left_to_right*right_square(4,:).'];
+right_face = [R_from_left_to_right*right_face(1,:).', R_from_left_to_right*right_face(2,:).' , R_from_left_to_right*right_face(3,:).', R_from_left_to_right*right_face(4,:).'];
 
 % add traslation
-right_square = right_square + relative_pose_from_left_to_right;
-right_square = right_square.';
+right_face = right_face + relative_pose_from_left_to_right;
+right_face = right_face.';
 
 % plot
 figure
 plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
 hold on
-pcshow(left_square,'red', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(left_face,'red', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 hold on
-pcshow(right_square,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(right_face,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
@@ -497,7 +498,7 @@ zlabel('Z')
 figure
 plotCamera('Location', cameraPos_wrt_right, 'Orientation', camera_orientation_wrt_right.', 'Size', 20);
 hold on
-pcshow(left_square,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(left_face,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 hold on
 xlabel('X')
 ylabel('Y')
@@ -547,6 +548,10 @@ out = transform_and_show(H_oriz_sr_r, im_rgb, "Hor SR Right");
 % their intersections is the point to localize on the vertical faces
 [line_ind_vert_l, lines_vertical_l] = select_lines(lines,im_rgb,"Select lines on the left face: left up down right", auto_selection, LINES_VERTICAL_LEFT);
 [line_ind_vert_r, lines_vertical_r] = select_lines(lines,im_rgb,"Select lines on the right face: left up down right", auto_selection, LINES_VERTICAL_RIGHT);
+
+% plot all lines selected
+line_ind = [line_ind, line_ind_vert_l, line_ind_vert_r];
+plot_lines(lines(1,line_ind), im_rgb);
 
 % get useful lines
 l_v_left = lines_vertical_l(:,1);
@@ -631,9 +636,10 @@ vert_points_p = relative_pose_from_left_to_right + (R_from_left_to_right * vert_
 vert_points = [vert_points; vert_points_p.'];
 
 % plot all
-pcshow(left_square,'red', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+figure
+pcshow(left_face,'red', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 hold on
-pcshow(right_square,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(right_face,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 pcshow(vert_points, 'green','VerticalAxisDir', 'up', 'MarkerSize', 20);
 plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
 
@@ -689,11 +695,11 @@ points_p(2,:) = -points_p(2,:);
 points_p = points_p.';
 
 % plot all for 3d shape reconstruction
-vert_square = [points_p(:,1),zeros(size(points_p,1),1), points_p(:,2); vert_points_p.'];
+vert_points = [points_p(:,1),zeros(size(points_p,1),1), points_p(:,2); vert_points_p.'];
 
-pcshow(left_square,'red', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(left_face,'red', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 hold on
-pcshow(right_square,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
-pcshow(vert_square, 'green','VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(right_face,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
+pcshow(vert_points, 'green','VerticalAxisDir', 'up', 'MarkerSize', 20);
 plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
 

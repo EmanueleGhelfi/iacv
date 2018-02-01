@@ -24,6 +24,7 @@ Files starting with k are the calibration matrices obtained with different const
 - k_vp_nn.txt is the same as before but with vanishing points not normalized
 - k_all.txt is the calibration matrix obtained with all constraints normalised 
 - out.txt contains all the data from a run of the algorithm
+- results.mat contains the results inside out.txt in matlab format
 
 For more details please refer to the documentation.
 
@@ -34,9 +35,9 @@ The folder images contains images generated during the algorithm.
 - lines: extracted lines
 - affine_rectification: the affine rectified image
 - shape_reconstruction: shape reconstruction of the horizontal plane
-- cam_loc_l/cam_loc_l2: camera localisation wrt the left horizontal face
-- cam_loc_r/cam_loc_r2: camera localisation wrt the right horizontal face
-- cam_loc/cam_loc: camera localisation wrt the both horizontal faces
+- cam_loc_l/cam_loc_l2/cam_loc_l3: camera localisation wrt the left horizontal face
+- cam_loc_r/cam_loc_r2/cam_loc_r3: camera localisation wrt the right horizontal face
+- cam_loc/cam_loc2/cam_loc3: camera localisation wrt the both horizontal faces
 - vertical_face_left: shape reconstruction of the left vertical face
 - vertical_face_right: shape reconstruction of the right vertical face
 - hor_sr_l_using_P: shape reconstruction of horizontal plane using the pinhole model

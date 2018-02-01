@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.1.15)  1 FEB 2018 19:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.1.15)  1 FEB 2018 21:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -766,23 +766,32 @@ Package: authblk 2001/02/27 1.3 (PWD)
 \c@Maxaffil=\count177
 \c@authors=\count178
 \c@affil=\count179
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count180
+\float@exts=\toks44
+\float@box=\box42
+\@float@everytoks=\toks45
+\@floatcapt=\box43
 ) (./doc.aux)
 \openout1 = `doc.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -819,17 +828,17 @@ LaTeX Font Info:    ... okay on input line 38.
 
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count180
+\scratchcounter=\count181
 \scratchdimen=\dimen277
-\scratchbox=\box42
-\nofMPsegments=\count181
-\nofMParguments=\count182
-\everyMPshowfont=\toks44
-\MPscratchCnt=\count183
+\scratchbox=\box44
+\nofMPsegments=\count182
+\nofMParguments=\count183
+\everyMPshowfont=\toks46
+\MPscratchCnt=\count184
 \MPscratchDim=\dimen278
-\MPnumerator=\count184
-\makeMPintoPDFobject=\count185
-\everyMPtoPDFconversion=\toks45
+\MPnumerator=\count185
+\makeMPintoPDFobject=\count186
+\everyMPtoPDFconversion=\toks47
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -850,10 +859,11 @@ e
 ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box43
-Package hyperref Info: Link coloring OFF on input line 38.
+\AtBeginShipoutBox=\box45
+Package hyperref Info: Link coloring OFF on input line 39.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -861,11 +871,11 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count186
+\c@section@level=\count187
 )
-LaTeX Info: Redefining \ref on input line 38.
-LaTeX Info: Redefining \pageref on input line 38.
-LaTeX Info: Redefining \nameref on input line 38.
+LaTeX Info: Redefining \ref on input line 39.
+LaTeX Info: Redefining \pageref on input line 39.
+LaTeX Info: Redefining \nameref on input line 39.
 
 (./doc.out) (./doc.out)
 \@outlinefile=\write4
@@ -902,24 +912,24 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: ../../imgs/Input_image.jpeg Graphic file (type jpg)
 
 <use ../../imgs/Input_image.jpeg>
-Package pdftex.def Info: ../../imgs/Input_image.jpeg used on input line 50.
+Package pdftex.def Info: ../../imgs/Input_image.jpeg used on input line 51.
 (pdftex.def)             Requested size: 258.00539pt x 193.46646pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 60.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 61.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 60.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 61.
  [3 <../../imgs/Input_image.jpeg>] <../../imgs/edges.jpg, id=125, 1597.97pt x 1
 166.3575pt>
 File: ../../imgs/edges.jpg Graphic file (type jpg)
 
 <use ../../imgs/edges.jpg>
-Package pdftex.def Info: ../../imgs/edges.jpg used on input line 80.
+Package pdftex.def Info: ../../imgs/edges.jpg used on input line 81.
 (pdftex.def)             Requested size: 258.00539pt x 188.31174pt.
 
-Overfull \hbox (2.90572pt too wide) in paragraph at lines 92--93
+Overfull \hbox (2.90572pt too wide) in paragraph at lines 93--94
 []\OT1/cmr/m/n/10.95 Each in-di-vid-ual da-tum (edge $\OML/cmm/m/it/10.95 x[]$\
 OT1/cmr/m/n/10.95 ) votes for all the model com-pat-i-ble with him ( $\OML/cmm/
 m/it/10.95 f\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 m; x[]\OT1/cmr/m/n/10.95 ) 
@@ -931,10 +941,10 @@ m/it/10.95 f\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 m; x[]\OT1/cmr/m/n/10.95 )
 File: ../../imgs/lines.jpg Graphic file (type jpg)
 
 <use ../../imgs/lines.jpg>
-Package pdftex.def Info: ../../imgs/lines.jpg used on input line 109.
+Package pdftex.def Info: ../../imgs/lines.jpg used on input line 110.
 (pdftex.def)             Requested size: 344.005pt x 251.08232pt.
  [5 <../../imgs/lines.jpg>]
-Overfull \hbox (45.33987pt too wide) in paragraph at lines 130--131
+Overfull \hbox (45.33987pt too wide) in paragraph at lines 131--132
 [][] 
  []
 
@@ -943,7 +953,7 @@ File: ../../imgs/affine_rectification.jpg Graphic file (type jpg)
 
 <use ../../imgs/affine_rectification.jpg>
 Package pdftex.def Info: ../../imgs/affine_rectification.jpg used on input line
- 176.
+ 177.
 (pdftex.def)             Requested size: 344.005pt x 105.84807pt.
  [7 <../../imgs/affine_rectification.jpg>] [8] <../../imgs/shape_reconstruction
 .jpg, id=178, 977.6525pt x 1051.93pt>
@@ -951,10 +961,10 @@ File: ../../imgs/shape_reconstruction.jpg Graphic file (type jpg)
 
 <use ../../imgs/shape_reconstruction.jpg>
 Package pdftex.def Info: ../../imgs/shape_reconstruction.jpg used on input line
- 265.
+ 266.
 (pdftex.def)             Requested size: 215.0023pt x 231.32901pt.
  [9 <../../imgs/shape_reconstruction.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 287--288
+Underfull \hbox (badness 10000) in paragraph at lines 288--289
 
  []
 
@@ -962,74 +972,96 @@ Underfull \hbox (badness 10000) in paragraph at lines 287--288
 File: ../../imgs/cam_loc_l.jpg Graphic file (type jpg)
 
 <use ../../imgs/cam_loc_l.jpg>
-Package pdftex.def Info: ../../imgs/cam_loc_l.jpg used on input line 429.
-(pdftex.def)             Requested size: 199.16928pt x 108.91347pt.
+Package pdftex.def Info: ../../imgs/cam_loc_l.jpg used on input line 430.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
 
 <../../imgs/cam_loc_l2.jpg, id=211, 2099.845pt x 1148.29pt>
 File: ../../imgs/cam_loc_l2.jpg Graphic file (type jpg)
 
 <use ../../imgs/cam_loc_l2.jpg>
-Package pdftex.def Info: ../../imgs/cam_loc_l2.jpg used on input line 431.
-(pdftex.def)             Requested size: 199.16928pt x 108.91347pt.
+Package pdftex.def Info: ../../imgs/cam_loc_l2.jpg used on input line 432.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
 
-<../../imgs/cam_loc_r.jpg, id=216, 2099.845pt x 1148.29pt>
+<../../imgs/cam_loc_l3.jpg, id=212, 2099.845pt x 1148.29pt>
+File: ../../imgs/cam_loc_l3.jpg Graphic file (type jpg)
+
+<use ../../imgs/cam_loc_l3.jpg>
+Package pdftex.def Info: ../../imgs/cam_loc_l3.jpg used on input line 434.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
+ [13 <../../imgs/cam_loc_l.jpg> <../../imgs/cam_loc_l2.jpg> <../../imgs/cam_loc
+_l3.jpg>]
+<../../imgs/cam_loc_r.jpg, id=228, 2099.845pt x 1148.29pt>
 File: ../../imgs/cam_loc_r.jpg Graphic file (type jpg)
 
 <use ../../imgs/cam_loc_r.jpg>
-Package pdftex.def Info: ../../imgs/cam_loc_r.jpg used on input line 447.
-(pdftex.def)             Requested size: 199.16928pt x 108.91347pt.
+Package pdftex.def Info: ../../imgs/cam_loc_r.jpg used on input line 450.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
 
-<../../imgs/cam_loc_r2.jpg, id=217, 2099.845pt x 1148.29pt>
+<../../imgs/cam_loc_r2.jpg, id=229, 2099.845pt x 1148.29pt>
 File: ../../imgs/cam_loc_r2.jpg Graphic file (type jpg)
 
 <use ../../imgs/cam_loc_r2.jpg>
-Package pdftex.def Info: ../../imgs/cam_loc_r2.jpg used on input line 449.
-(pdftex.def)             Requested size: 199.16928pt x 108.91347pt.
+Package pdftex.def Info: ../../imgs/cam_loc_r2.jpg used on input line 452.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
 
-<../../imgs/cam_loc.jpg, id=218, 1124.2pt x 843.15pt>
+<../../imgs/cam_loc_r3.jpg, id=230, 2099.845pt x 1148.29pt>
+File: ../../imgs/cam_loc_r3.jpg Graphic file (type jpg)
+
+<use ../../imgs/cam_loc_r3.jpg>
+Package pdftex.def Info: ../../imgs/cam_loc_r3.jpg used on input line 454.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
+
+<../../imgs/cam_loc.jpg, id=231, 1124.2pt x 843.15pt>
 File: ../../imgs/cam_loc.jpg Graphic file (type jpg)
 
 <use ../../imgs/cam_loc.jpg>
-Package pdftex.def Info: ../../imgs/cam_loc.jpg used on input line 456.
-(pdftex.def)             Requested size: 199.16928pt x 149.36748pt.
+Package pdftex.def Info: ../../imgs/cam_loc.jpg used on input line 461.
+(pdftex.def)             Requested size: 142.26378pt x 106.69289pt.
 
-<../../imgs/cam_loc2.jpg, id=219, 1124.2pt x 843.15pt>
+<../../imgs/cam_loc2.jpg, id=232, 1124.2pt x 843.15pt>
 File: ../../imgs/cam_loc2.jpg Graphic file (type jpg)
 
 <use ../../imgs/cam_loc2.jpg>
-Package pdftex.def Info: ../../imgs/cam_loc2.jpg used on input line 458.
-(pdftex.def)             Requested size: 199.16928pt x 149.36748pt.
- [13 <../../imgs/cam_loc_l.jpg> <../../imgs/cam_loc_l2.jpg>] [14 <../../imgs/ca
-m_loc_r.jpg> <../../imgs/cam_loc_r2.jpg> <../../imgs/cam_loc.jpg> <../../imgs/c
-am_loc2.jpg>]
-<../../imgs/vertical_face_left.jpg, id=241, 1098.1025pt x 1258.7025pt>
+Package pdftex.def Info: ../../imgs/cam_loc2.jpg used on input line 463.
+(pdftex.def)             Requested size: 142.26378pt x 106.69289pt.
+
+<../../imgs/cam_loc3.jpg, id=233, 2099.845pt x 1148.29pt>
+File: ../../imgs/cam_loc3.jpg Graphic file (type jpg)
+
+<use ../../imgs/cam_loc3.jpg>
+Package pdftex.def Info: ../../imgs/cam_loc3.jpg used on input line 465.
+(pdftex.def)             Requested size: 142.26378pt x 77.79533pt.
+ [14 <../../imgs/cam_loc_r.jpg> <../../imgs/cam_loc_r2.jpg> <../../imgs/cam_loc
+_r3.jpg> <../../imgs/cam_loc.jpg> <../../imgs/cam_loc2.jpg> <../../imgs/cam_loc
+3.jpg>]
+<../../imgs/vertical_face_left.jpg, id=247, 1098.1025pt x 1258.7025pt>
 File: ../../imgs/vertical_face_left.jpg Graphic file (type jpg)
 
 <use ../../imgs/vertical_face_left.jpg>
 Package pdftex.def Info: ../../imgs/vertical_face_left.jpg used on input line 4
-74.
+81.
 (pdftex.def)             Requested size: 142.26378pt x 163.06088pt.
 
-<../../imgs/vertical_face_right.jpg, id=242, 1126.2075pt x 1168.365pt>
+<../../imgs/vertical_face_right.jpg, id=248, 1126.2075pt x 1168.365pt>
 File: ../../imgs/vertical_face_right.jpg Graphic file (type jpg)
 
 <use ../../imgs/vertical_face_right.jpg>
 Package pdftex.def Info: ../../imgs/vertical_face_right.jpg used on input line 
-476.
+483.
 (pdftex.def)             Requested size: 142.26378pt x 147.57845pt.
  [15 <../../imgs/vertical_face_left.jpg> <../../imgs/vertical_face_right.jpg>]
-<../../imgs/3d_shape_rec.jpg, id=251, 1597.97pt x 1166.3575pt>
+<../../imgs/3d_shape_rec.jpg, id=257, 1597.97pt x 1166.3575pt>
 File: ../../imgs/3d_shape_rec.jpg Graphic file (type jpg)
 
 <use ../../imgs/3d_shape_rec.jpg>
-Package pdftex.def Info: ../../imgs/3d_shape_rec.jpg used on input line 518.
+Package pdftex.def Info: ../../imgs/3d_shape_rec.jpg used on input line 525.
 (pdftex.def)             Requested size: 199.16928pt x 145.36719pt.
 
-<../../imgs/3d_shape_rec2.jpg, id=252, 1597.97pt x 1166.3575pt>
+<../../imgs/3d_shape_rec2.jpg, id=258, 1597.97pt x 1166.3575pt>
 File: ../../imgs/3d_shape_rec2.jpg Graphic file (type jpg)
 
 <use ../../imgs/3d_shape_rec2.jpg>
-Package pdftex.def Info: ../../imgs/3d_shape_rec2.jpg used on input line 520.
+Package pdftex.def Info: ../../imgs/3d_shape_rec2.jpg used on input line 527.
 (pdftex.def)             Requested size: 199.16928pt x 145.36719pt.
  [16 <../../imgs/3d_shape_rec.jpg> <../../imgs/3d_shape_rec2.jpg>] [17]
 File: ../../matlab_output/k.txt  (verbatim)
@@ -1039,39 +1071,47 @@ File: ../../matlab_output/k_vp_nn.txt  (verbatim)
  [19]
 File: ../../matlab_output/k_all.txt  (verbatim)
  [20]
-<../../imgs/hor_sr_l_using_P.jpg, id=292, 459.7175pt x 379.4175pt>
+<../../imgs/hor_sr_l_using_P.jpg, id=298, 459.7175pt x 379.4175pt>
 File: ../../imgs/hor_sr_l_using_P.jpg Graphic file (type jpg)
 
 <use ../../imgs/hor_sr_l_using_P.jpg>
-Package pdftex.def Info: ../../imgs/hor_sr_l_using_P.jpg used on input line 674
+Package pdftex.def Info: ../../imgs/hor_sr_l_using_P.jpg used on input line 681
 .
 (pdftex.def)             Requested size: 142.26378pt x 117.41557pt.
 
-<../../imgs/hor_sr_r_using_P.jpg, id=294, 525.965pt x 431.6125pt>
+<../../imgs/hor_sr_r_using_P.jpg, id=300, 525.965pt x 431.6125pt>
 File: ../../imgs/hor_sr_r_using_P.jpg Graphic file (type jpg)
 
 <use ../../imgs/hor_sr_r_using_P.jpg>
-Package pdftex.def Info: ../../imgs/hor_sr_r_using_P.jpg used on input line 676
+Package pdftex.def Info: ../../imgs/hor_sr_r_using_P.jpg used on input line 683
 .
 (pdftex.def)             Requested size: 142.26378pt x 116.74109pt.
  [21]
 File: ../../matlab_output/out.txt  (verbatim)
  [22 <../../imgs/hor_sr_l_using_P.jpg> <../../imgs/hor_sr_r_using_P.jpg>] [23] 
-[24] [25] [26]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 696.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 696.
- (./doc.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 696.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 696.
+[24] [25]
+<../../imgs/used_lines.jpg, id=328, 1597.97pt x 1166.3575pt>
+File: ../../imgs/used_lines.jpg Graphic file (type jpg)
+
+<use ../../imgs/used_lines.jpg>
+Package pdftex.def Info: ../../imgs/used_lines.jpg used on input line 699.
+(pdftex.def)             Requested size: 258.00539pt x 188.31174pt.
+ [26 <../../imgs/used_lines.jpg>] [27]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 714.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 714.
+
+(./doc.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 714.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 714.
 Package rerunfilecheck Info: File `doc.out' has not changed.
 (rerunfilecheck)             Checksum: 0CD73DD34FEB4ECD8EBF40A3FDB0FB2B;1128.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 696.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 714.
  ) 
 Here is how much of TeX's memory you used:
- 20989 strings out of 492995
- 394135 string characters out of 6132704
- 495651 words of memory out of 5000000
- 24048 multiletter control sequences out of 15000+600000
+ 21065 strings out of 492995
+ 395413 string characters out of 6132704
+ 497001 words of memory out of 5000000
+ 24111 multiletter control sequences out of 15000+600000
  11240 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  61i,15n,96p,578b,739s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1089,10 +1129,10 @@ xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
 e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive
 /2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on doc.pdf (26 pages, 8764016 bytes).
+Output written on doc.pdf (27 pages, 9280095 bytes).
 PDF statistics:
- 395 PDF objects out of 1000 (max. 8388607)
- 330 compressed objects within 4 object streams
- 97 named destinations out of 1000 (max. 500000)
- 250 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 407 PDF objects out of 1000 (max. 8388607)
+ 337 compressed objects within 4 object streams
+ 102 named destinations out of 1000 (max. 500000)
+ 270 words of extra memory for PDF output out of 10000 (max. 10000000)
 
