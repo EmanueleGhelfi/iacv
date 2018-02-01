@@ -1,25 +1,25 @@
 # Image Analysis and Computer Vision
 Repository for the homework of Image Analysis and Computer Vision course of Politecnico di Milano 2017/2018.  
 
-# INSTRUCTIONS
+# Instructions
 
-### FOLDER DESCRIPTION
-- src: The principal matlab files are inside the ?src? folder.
-	The folder ?old? inside ?src? contains old matlab files.
-- reference: contains reference documents useful during the 		development.
+### Folders
+- src: The principal matlab files are inside the "src" folder.
+	The folder "old" inside "src" contains old matlab files.
+- reference: contains reference documents useful during the development.
 - doc: contains the assignments and the documentation of the project
 - matlab_output: contains output data 
 
-### MATLAB SOURCE FILES
-The main matlab file is ?main.m? that contains all the workflow.
+### Matlab Source Files
+The main matlab file is "main.m" that contains all the workflow.
 The variable debug must be true if the user wants to see all the images generated during the algorithm. 
 If the variable auto_selection is true the lines hardcoded are used. If false the lines must be selected manually from the user.
 During the line selection phase the user must read the title of each image in order to select lines in appropriate way. To select a line the user must select a point near the line.
 There are four methods for Camera Calibration, the user can select the most appropriate one (the one with all constraints, i.e. the last one, probably is slightly better than the other).
 In the camera localisation images the left horizontal face is identified with red points, while the right horizontal face with blue points. Points on the vertical faces can be selected through line intersection or through manual selection of points. In both cases points are green.
 
-### MATLAB OUTPUT FILES
-The folder ?matlab_output? contains the output data of matlab, generated using the diary function. 
+### Matlab Output Files
+The folder "matlab_output" contains the output data of matlab, generated using the diary function. 
 Files starting with k are the calibration matrices obtained with different constraints:
 - k.txt is the matrix with only the line at infinity constraints and the homography constraints
 - k_vp_n.txt is the matrix obtained with only normalised vanishing points orthogonality constraints
@@ -30,7 +30,7 @@ Files starting with k are the calibration matrices obtained with different const
 
 For more details please refer to the documentation.
 
-### IMGS
+### Images
 The folder images contains images generated during the algorithm.
 - Input_image: original input image
 - edges: extracted edges
