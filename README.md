@@ -80,7 +80,7 @@ The last row is the imaged line at infinite.
 
 [pag 49 Multiple View Geometry in computer vision]
 
-![Alt text](imgs/rectified_img.jpg?raw=true "Affine rectification")
+![Alt text](imgs/affine_rectification.jpg?raw=true "Affine rectification")
 
 ### Metric rectification
 
@@ -92,7 +92,7 @@ So we can use two pair of orthogonal lines to determine its parameters.
 
 Once found C_star_inf_prime we can use standard cholesky (or SVD) to determine Ha.
 
-![Alt text](imgs/shape_rec3.jpg?raw=true "Metric rectification")
+![Alt text](imgs/shape_reconstruction.jpg?raw=true "Metric rectification")
 
 ### Measure of Metric properties
 
@@ -148,7 +148,7 @@ H_omog transforms the rectified image in the real world scene.
 
 
 
-![Alt text](imgs/cameraLocalization.jpg?raw=true "Camera Localization")
+![Alt text](imgs/cam_loc.jpg?raw=true "Camera Localization")
 
 
 
