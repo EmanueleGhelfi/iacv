@@ -3,6 +3,7 @@
 \geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
 %\geometry{landscape}                		% Activate for rotated page geometry
 %\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{dblfloatfix}
 \usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
 								% TeX will automatically convert eps --> pdf in pdflatex
 \graphicspath{ {../../imgs/} }
@@ -17,6 +18,7 @@
 \usetikzlibrary{positioning}
 \usepackage{hyperref}
 \usepackage{authblk}
+\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
 
 
 \makeatletter
@@ -44,11 +46,11 @@ A bandoneon is a musical instrument, consisting in two rigid wooden parts connec
 In the given image (Figure \ref{inputimg}), the bandoneon is placed on a horizontal floor. Four rectangular faces are visible in the image: two coplanar horizontal faces, and two non-coplanar vertical faces. The long side of the horizontal faces is 243 mm, and it is slightly longer than the long side of the vertical face.
 For each horizontal face, two groups of parallel lines can easily be identified. The two groups of lines are mutually perpendicular. One of the (short) lines on each horizontal face is also common to a vertical face. Part of the horizontal floor is also visible: we can assume to see groups of parallel lines (the groups are also mutually orthogonal): These lines can be used to help in robustly find, e.g., the image of the horizontal vanishing line (i.e. the image of the line at the infinity of the horizontal plane). We can NOT assume square patterns on the floor.
 In addition, the long lines in the vertical faces are vertical (i.e. orthogonal both to the horizontal faces and to the floor).
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{Input_image.jpeg}
+\begin{figure*}[!b]
+\includegraphics[width=0.6\linewidth]{Input_image.jpeg}
 \caption{Input Image}
 \label{inputimg}
-\end{figure}
+\end{figure*}
 
 \section{Line Extraction}
 \textbf{Use the learned techniques to find edges and lines in the image. Then manually select those lines which are useful for the subsequent steps.} \hfill \break
@@ -75,7 +77,7 @@ The processed image with extracted edges is shown in figure \ref{edge}.
 
 \begin{figure}
 
-\includegraphics[width=0.8\linewidth]{edges.jpg}
+\includegraphics[width=0.6\linewidth]{edges.jpg}
 
 \caption{Edge detection through Canny}
 \label{edge}
@@ -260,7 +262,7 @@ $$
 The final result of the shape reconstruction phase for the two upper faces is showed in figure \ref{shaperec}.
 
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{shape_rec_rotated.jpg}
+\includegraphics[width=0.5\linewidth]{shape_reconstruction.jpg}
 \caption{Shape reconstruction}
 \label{shaperec}
 \end{figure}
@@ -424,9 +426,9 @@ The result of the camera localization phase is shown in figure \ref{left_loc}.
 
 \begin{figure}
  \centering
-    \subfloat{{\includegraphics[width=5cm]{cam_loc_l.jpg} }}%
+    \subfloat{{\includegraphics[width=7cm]{cam_loc_l.jpg} }}%
     \qquad
-    \subfloat{{\includegraphics[width=5cm]{cam_loc_l2.jpg} }}%
+    \subfloat{{\includegraphics[width=7cm]{cam_loc_l2.jpg} }}%
     \caption{Camera Localization from left face}%
     \label{left_loc}%
 \end{figure}
@@ -442,18 +444,18 @@ In figures \ref{left_loc}, \ref{right_loc} \ref{general_loc} the camera is repre
 
 \begin{figure}
  \centering
-    \subfloat{{\includegraphics[width=5cm]{cam_loc_r.jpg} }}%
+    \subfloat{{\includegraphics[width=7cm]{cam_loc_r.jpg} }}%
     \qquad
-    \subfloat{{\includegraphics[width=5cm]{cam_loc_r2.jpg} }}%
+    \subfloat{{\includegraphics[width=7cm]{cam_loc_r2.jpg} }}%
     \caption{Camera Localization from right face}%
     \label{right_loc}%
 \end{figure}
 
 \begin{figure}
  \centering
-    \subfloat{{\includegraphics[width=5cm]{cam_loc.jpg} }}%
+    \subfloat{{\includegraphics[width=7cm]{cam_loc.jpg} }}%
     \qquad
-    \subfloat{{\includegraphics[width=5cm]{cam_loc2.jpg} }}%
+    \subfloat{{\includegraphics[width=7cm]{cam_loc2.jpg} }}%
     \caption{Camera Localization from both face}%
     \label{general_loc}%
 \end{figure}
@@ -679,7 +681,6 @@ Measures of segments are a bit different from their real measures, this can be d
 Despite small errors the reconstructed shape is satisfactory, this means that the pinhole model is quite good.
  
 \section{Computed Results}
- 
 \verbatiminput{../../matlab_output/out.txt} %a
 
 Where $relative\_pose\_from\_left\_to\_right$ is the distance (in mm) from the origin of the left face to the right face. The origin of the left face is the intersection of lines 15 and 1 and the origin of the right face is the intersection of lines 72 and 76.

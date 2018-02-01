@@ -1,19 +1,19 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}
-\contentsline {section}{\numberline {2}Line Extraction}{4}{section.2}
+\contentsline {section}{\numberline {2}Line Extraction}{3}{section.2}
 \contentsline {subsection}{\numberline {2.1}Canny}{4}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}Hough Transform}{4}{subsection.2.2}
-\contentsline {section}{\numberline {3}Shape Reconstruction}{5}{section.3}
-\contentsline {subsection}{\numberline {3.1}Affine Rectification}{7}{subsection.3.1}
+\contentsline {section}{\numberline {3}Shape Reconstruction}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}Affine Rectification}{6}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Euclidean Rectification}{7}{subsection.3.2}
 \contentsline {section}{\numberline {4}Measure of Metric Properties}{9}{section.4}
-\contentsline {section}{\numberline {5}Camera Calibration}{11}{section.5}
-\contentsline {section}{\numberline {6}Localization}{13}{section.6}
+\contentsline {section}{\numberline {5}Camera Calibration}{10}{section.5}
+\contentsline {section}{\numberline {6}Localization}{12}{section.6}
 \contentsline {section}{\numberline {7}Shape Reconstruction Vertical Faces }{15}{section.7}
 \contentsline {section}{\numberline {8}3D Shape Reconstruction}{15}{section.8}
 \contentsline {section}{\numberline {9}Implementation Details}{16}{section.9}
-\contentsline {subsection}{\numberline {9.1}Fitting Vanishing Point}{17}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}Fitting Line at Infinity}{18}{subsection.9.2}
+\contentsline {subsection}{\numberline {9.1}Fitting Vanishing Point}{16}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Fitting Line at Infinity}{17}{subsection.9.2}
 \contentsline {subsection}{\numberline {9.3}Fitting Conics}{18}{subsection.9.3}
 \contentsline {section}{\numberline {10}Results Analysis}{21}{section.10}
 \contentsline {section}{\numberline {11}Computed Results}{22}{section.11}
-\contentsline {section}{\numberline {12}References}{27}{section.12}
+\contentsline {section}{\numberline {12}References}{26}{section.12}

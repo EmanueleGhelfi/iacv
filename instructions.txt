@@ -1,14 +1,20 @@
-The principal matlab files are inside the “src” folder.
-The folder “old” inside “src” contains old matlab files.
+
+- INSTRUCTIONS -
+
+- FOLDER DESCRIPTION -
+- src: The principal matlab files are inside the “src” folder.
+	The folder “old” inside “src” contains old matlab files.
+- reference: contains reference documents useful during the 		development.
+- doc: contains the assignments and the documentation of the project
+- matlab_output: contains output data 
 
 — MATLAB SOURCE FILES —
 The main matlab file is “main.m” that contains all the workflow.
 The variable debug must be true if the user wants to see all the images generated during the algorithm. 
-If the variable auto_selection is true the lines hardcoded are used. If it is false the lines must be selected manually from the user.
-During the line selection phase the user must read the title of each image in order to select lines in appropriate way.
-There are four methods for Camera Calibration, the user can select the most appropriate (the one with all constraints (the last one) probably is slightly better than the other.
+If the variable auto_selection is true the lines hardcoded are used. If false the lines must be selected manually from the user.
+During the line selection phase the user must read the title of each image in order to select lines in appropriate way. To select a line the user must select a point near the line.
+There are four methods for Camera Calibration, the user can select the most appropriate one (the one with all constraints, i.e. the last one, probably is slightly better than the other).
 In the camera localisation images the left horizontal face is identified with red points, while the right horizontal face with blue points. Points on the vertical faces can be selected through line intersection or through manual selection of points. In both cases points are green.
-The 
 
 — MATLAB OUTPUT FILES —
 The folder “matlab_output” contains the output data of matlab, generated using the diary function. 
@@ -21,12 +27,21 @@ Files starting with k are the calibration matrices obtained with different const
 
 For more details please refer to the documentation.
 
-— DOCUMENTATION —
-Documentation files are inside the folder “doc”. 
-
-— REFERENCE —
-The folder “reference” contains reference documents useful during the development.
-
 — IMGS —
 The folder images contains images generated during the algorithm.
-- edges is the image with extracted edges
+- Input_image: original input image
+- edges: extracted edges
+- lines: extracted lines
+- affine_rectification: the affine rectified image
+- shape_reconstruction: shape reconstruction of the horizontal plane
+- cam_loc_l/cam_loc_l2: camera localisation wrt the left horizontal face
+- cam_loc_r/cam_loc_r2: camera localisation wrt the right horizontal face
+- cam_loc/cam_loc: camera localisation wrt the both horizontal faces
+- vertical_face_left: shape reconstruction of the left vertical face
+- vertical_face_right: shape reconstruction of the right vertical face
+- hor_sr_l_using_P: shape reconstruction of horizontal plane using the pinhole model
+		    with the world on the left horizontal face 		   
+- hor_sr_r_using_P: shape reconstruction of horizontal plane using the pinhole model 
+		   with the world on the right horizontal face
+- 3d_shape_rec/3d_shape_rec2: coordinates of the 3d shape reconstruction of the object
+

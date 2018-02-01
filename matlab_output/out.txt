@@ -138,7 +138,8 @@ cameraPos_wrt_right =
   -2.727355201929570
    2.942239839695089
 
-3d coordinates of the points on the vertical faces. First four points are on the left vertical face.
+3d coordinates of the points on the vertical faces. 
+First four points are on the left vertical face.
 The other four are on the right vertical face.
 Coordinates are in the frame of the left horizontal face.
 
