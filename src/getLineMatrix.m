@@ -1,7 +1,7 @@
 function L = getLineMatrix(lines,indices)
 %GETLINEMATRIX Returns a matrix with lines as columns
-%   Detailed explanation goes here
-% in this we save perpendicular lines 
+% lines are lines returned by hough lines
+% indices are indices of lines to keep
 Ls = zeros(3, size(indices,2));
 
 for ii = 1:size(indices,2)

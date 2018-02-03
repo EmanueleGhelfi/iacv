@@ -61,12 +61,6 @@ line_ind = [line_ind_l1, line_ind_l2, line_ind_r1, line_ind_r2, line_ind_ground]
 plot_lines(lines(1,line_ind), im_rgb);
 
 %% extract the line at infinite on the horizontal plane
-% older version, this version cosiders couple of parallel lines, finds its
-% vp and then fit the lines through these points. Less accurate than the
-% newer version
-%l_inf_prime = getL_inf_prime(parallelLines);
-
-%% Another approach in order to find l_inf_prime:
 % compute vanishing point of directions in the horizontal plane
 % then fit the line through these points
 
@@ -124,6 +118,8 @@ R = rotx(deg2rad(180));
 
 % calculate the composite transformation
 % img -> affine -> euclidean -> rotation
+% H_r is the transformation from the original image to the euclidean
+% reconstruction.
 H_r = R * H_a_e * H_r_aff;
 
 out_e = transform_and_show(H_r, im_rgb, "Euclidean Reconstruction");
@@ -131,8 +127,8 @@ out_e = transform_and_show(H_r, im_rgb, "Euclidean Reconstruction");
 
 %% Measure of metric properties (relative orientation)
 % in order to determine the relative position between the vertical faces
-% it's possible to measure the cosine of the angle between the two longest
-% line in each face. (e.g. between line 1 and 4)
+% it's possible to measure the cosine of the angle between the
+% corresponding lines in each face and then do the average.
 lines_for_theta = [createLinePairsFromTwoSets(lines_l1, lines_r1), createLinePairsFromTwoSets(lines_l2, lines_r2)];
 
 % transform lines according to H_r
@@ -158,8 +154,14 @@ for ii = 1:2:size(lines_for_theta,2)
 end
 
 % do the average of the estimates
+% theta is the angle from the right face and the left face (from the
+% reference frame on the left face and the reference frame on the right
+% face.
 theta = mean(theta_est);
 
+% Here we compute the angle from the reference frame on the left face and
+% the reference frame of the image in order to express the position of the
+% right face in the reference frame of the left face
 % compute theta from left face to vertical direction
 lines_left_theta = transformLines(H_r, lines_l1);
                      
@@ -187,8 +189,11 @@ theta_from_left_to_img = mean(theta_left_est) + 180;
 
 
 %% Measure of metric properties (relative position)
+% Here we need to compute the imaged length of the longside of the left
+% face since we know its real length (LENGTH_LONGSIDE) from the additional
+% information provided.
 
-% measure longside of horizontal face and shortside for homography
+% measure longside of left horizontal face and shortside for homography
 % estimation
 % select the 4 lines on the horizontal upper left face
 [line_ind_left, lines_left_face] = select_lines(lines,im_rgb,"Select lines of the left horizontal face" ...
@@ -229,7 +234,8 @@ length_shortside2 = norm(x_dl_left - x_dr_left,2);
 % do the average
 length_shortside_img = (length_shortside1 + length_shortside2) / 2;
 
-% calculate aspect ratio
+% calculate aspect ratio, this is the aspect ratio on the real world since
+% now the image is a similarity.
 aspect_ratio_left = length_longside_img/length_shortside_img;
 
 % get the origin of the other face
@@ -244,13 +250,13 @@ x_origin2 = x_origin2 ./ x_origin2(3,1);
 
 x_origin1 = x_dl_left;
 
-% get distance in the image
+% get distance in the image of the two reference frames
 imaged_distance = norm(x_origin2 - x_origin1,2);
 
-% relative position in mm
+% relative distance in mm
 relative_position = imaged_distance * LENGTH_LONGSIDE / length_longside_img;
 
-% relative coordinates (in mm)
+% relative coordinates (in mm) in the reference frame of the image
 relative_coordinates = (x_origin2 - x_origin1).* LENGTH_LONGSIDE ./ length_longside_img;
 
 
@@ -269,13 +275,15 @@ relative_pose_from_left_to_right = R_last*R_from_img_to_left*relative_coordinate
 
 % (i.e., determine the calibration matrix K) assuming it is zero-skew 
 % (but not assuming it is natural).
-% use the image of vertical lines and intersect the vanishing points with
-% the line at inf on the horizontal plane, the two vp on the vertical
-% faces,
-% use also the ortogonality of vp on the vertical faces
+% use the image of vertical lines and intersect the vertical vanishing point
+% with the line at inf on the horizontal plane, use also the ortogonality 
+% of vp on the vertical faces, use also the homography method
+% Normalize all using H_scaling that brings one component in the range
+% [0,1] while the other in the range [0, aspect_ratio].
 
 % find [l_inf]
 % use l_inf_prime for two constraints
+% This is the scaling matrix that must be applied for normalization.
 H_scaling = diag([1/IMG_MAX_SIZE, 1/IMG_MAX_SIZE, 1]);
 l_infs = H_scaling.' \ l_inf_prime;
 
@@ -283,19 +291,23 @@ l_infs = H_scaling.' \ l_inf_prime;
 [line_ind_vert, lines_vertical] = select_lines(lines,im_rgb,"Select vertical parallel lines", auto_selection, LINES_VERTICAL);
 
 % plot all lines selected
-line_ind = [line_ind, line_ind_vert];
-plot_lines(lines(1,line_ind), im_rgb);
+if debug
+    line_ind = [line_ind, line_ind_vert];
+    plot_lines(lines(1,line_ind), im_rgb);
+end
 
 % get vertical vanishing point
 vp_vertical = H_scaling * getVp(lines_vertical);
 
 % get the vanishing point of the ground 
 vp_ground = H_scaling * getVp(lines_ground);
+
 %% LET'S CALIBRATE!
-% there are three different ways for computing K, the first and the last
-% are the better ways.
-% Using L_inf and homography
-IAC = getCalib_matrix(l_infs, vp_vertical, [], [], H_scaling/H_r);
+% there are 4 different ways for computing K using different constraints, 
+% the last one uses all the constraints and maybe is better.
+
+% Using L_inf, vertical vp and homography
+IAC = get_IAC(l_infs, vp_vertical, [], [], H_scaling/H_r);
 
 % get the intrinsic parameter before the denormalization
 alfa = sqrt(IAC(1,1));
@@ -303,7 +315,10 @@ u0 = -IAC(1,3)/(alfa^2);
 v0 = -IAC(2,3);
 fy = sqrt(IAC(3,3) - (alfa^2)*(u0^2) - (v0^2));
 fx = fy /alfa;
+
+% build K using the parametrization
 K = [fx 0 u0; 0 fy v0; 0 0 1];
+
 % denormalize K
 K = H_scaling \ K
 
@@ -317,7 +332,7 @@ alfa = fx/fy
 %% Computation of K using only vp not normalized
 vp_ground_de = getVp(lines_ground);
 vp_vertical_de = getVp(lines_vertical);
-IAC = getCalib_matrix([],[], [vp_ground_de, vp_l1, vp_l2, vp_r1, vp_r2, vp_l1, vp_r1], [vp_vertical_de,vp_vertical_de,vp_vertical_de,vp_vertical_de,vp_vertical_de, vp_l2, vp_r2], []); 
+IAC = get_IAC([],[], [vp_ground_de, vp_l1, vp_l2, vp_r1, vp_r2, vp_l1, vp_r1], [vp_vertical_de,vp_vertical_de,vp_vertical_de,vp_vertical_de,vp_vertical_de, vp_l2, vp_r2], []); 
 alfa = sqrt(IAC(1,1))
 u0 = -IAC(1,3)/(alfa^2)
 v0 = -IAC(2,3)
@@ -327,7 +342,7 @@ K = [fx 0 u0; 0 fy v0; 0 0 1]
 
 %% Computation of K using only Vp normalized
 
-IAC = getCalib_matrix([],[], [vp_ground, H_scaling * vp_l1, H_scaling * vp_l2, H_scaling * vp_r1,H_scaling * vp_r2, H_scaling *vp_l1, H_scaling *vp_r1], [vp_vertical,vp_vertical,vp_vertical,vp_vertical,vp_vertical,H_scaling * vp_l2,H_scaling * vp_r2], []); 
+IAC = get_IAC([],[], [vp_ground, H_scaling * vp_l1, H_scaling * vp_l2, H_scaling * vp_r1,H_scaling * vp_r2, H_scaling *vp_l1, H_scaling *vp_r1], [vp_vertical,vp_vertical,vp_vertical,vp_vertical,vp_vertical,H_scaling * vp_l2,H_scaling * vp_r2], []); 
 alfa = sqrt(IAC(1,1));
 u0 = -IAC(1,3)/(alfa^2);
 v0 = -IAC(2,3);
@@ -348,7 +363,7 @@ alfa = fx/fy
 %% The last way uses all the constraints
 % are the better ways.
 % Using L_inf and homography
-IAC = getCalib_matrix(l_infs, vp_vertical, [vp_ground, H_scaling * vp_l1, H_scaling * vp_l2, H_scaling * vp_r1,H_scaling * vp_r2, H_scaling *vp_l1, H_scaling *vp_r1], [vp_vertical,vp_vertical,vp_vertical,vp_vertical,vp_vertical,H_scaling * vp_l2,H_scaling * vp_r2], H_scaling/H_r);
+IAC = get_IAC(l_infs, vp_vertical, [vp_ground, H_scaling * vp_l1, H_scaling * vp_l2, H_scaling * vp_r1,H_scaling * vp_r2, H_scaling *vp_l1, H_scaling *vp_r1], [vp_vertical,vp_vertical,vp_vertical,vp_vertical,vp_vertical,H_scaling * vp_l2,H_scaling * vp_r2], H_scaling/H_r);
 
 % get the intrinsic parameter before the denormalization
 alfa = sqrt(IAC(1,1));
@@ -370,8 +385,9 @@ alfa = fx/fy
 % Refer to: 
 % A Flexible New Technique for Camera Calibration
 % by Zhengyou Zhang
-% Here we first extract the Rotation of the plane wrt the camera frame, the
-% we compute the rotation and translation of the camera wrt the plane.
+% Here we first extract the Rotation of the (left) plane wrt the camera
+% frame, then we compute the rotation and translation of the
+% camera wrt the plane.
 
 
 % first fit the homography to restore real measure (possible since we know
@@ -413,6 +429,7 @@ h1 = H_omog(:,1);
 h2 = H_omog(:,2);
 h3 = H_omog(:,3);
 
+% normalization factor.
 lambda = 1 / norm(K \ h1);
 
 % r1 = K^-1 * h1 normalized
@@ -422,12 +439,12 @@ r3 = cross(r1,r2);
 
 % rotation of the world with respect to the camera (R cam -> world)
 % where the world in this case is the left horizontal face
-R = [r1, r2, r3]
+R = [r1, r2, r3];
 
 % due to noise in the data R may be not a true rotation matrix.
 % approximate it through svd, obtaining a orthogonal matrix
 [U, ~, V] = svd(R);
-R = U * V'
+R = U * V';
 
 % Compute translation vector. This vector is the position of the plane wrt
 % the reference frame of the camera.
@@ -439,7 +456,7 @@ cameraRotation = R.';
 cameraPosition = -R.'*T;
 
 
-%% Display orientation and location from left
+%% Display orientation and position from left horizontal face
 
 figure
 plotCamera('Location', cameraPosition, 'Orientation', cameraRotation.', 'Size', 20);
@@ -472,9 +489,12 @@ cameraPos_wrt_right = -R_from_cam_to_right_plane.'*T_from_cam_to_right_plane;
 camera_orientation_wrt_right = R_from_cam_to_right_plane.';
 
 %% Display orientation and location from both faces
+
+% 3d coordinates of the left face
 left_face = [[x_ul; x_dl; x_ur; x_dr], zeros(size([x_ul; x_dl; x_ur; x_dr],1), 1)];
 
-% first rotate then add translation
+% in order to obtain the right face first rotate the left face then add 
+% translation vector
 right_face = left_face;
 
 right_face = [R_from_left_to_right*right_face(1,:).', R_from_left_to_right*right_face(2,:).' , R_from_left_to_right*right_face(3,:).', R_from_left_to_right*right_face(4,:).'];
@@ -498,6 +518,7 @@ zlabel('Z')
 figure
 plotCamera('Location', cameraPos_wrt_right, 'Orientation', camera_orientation_wrt_right.', 'Size', 20);
 hold on
+% use the left face since it's the same
 pcshow(left_face,'blue', 'VerticalAxisDir', 'up', 'MarkerSize', 20);
 hold on
 xlabel('X')
@@ -543,15 +564,21 @@ out_l = transform_and_show(H_oriz_sr, im_rgb, "Hor SR");
 H_oriz_sr_r = inv([P2(:,1), P2(:,2), P2(:,4)]);
 out = transform_and_show(H_oriz_sr_r, im_rgb, "Hor SR Right");
 
-%% 3d coordinates for 3d shaper rec
+%% 3d coordinates for 3d shape reconstruction
 % In this part the user should select lines on the vertical faces such that
 % their intersections is the point to localize on the vertical faces
-[line_ind_vert_l, lines_vertical_l] = select_lines(lines,im_rgb,"Select lines on the left face: left up down right", auto_selection, LINES_VERTICAL_LEFT);
-[line_ind_vert_r, lines_vertical_r] = select_lines(lines,im_rgb,"Select lines on the right face: left up down right", auto_selection, LINES_VERTICAL_RIGHT);
+[line_ind_vert_l, lines_vertical_l] = select_lines(lines,im_rgb, ...
+    "Select lines on the left face: left up down right",...
+    auto_selection, LINES_VERTICAL_LEFT);
+[line_ind_vert_r, lines_vertical_r] = select_lines(lines,im_rgb,...
+    "Select lines on the right face: left up down right",...
+    auto_selection, LINES_VERTICAL_RIGHT);
 
 % plot all lines selected
-line_ind = [line_ind, line_ind_vert_l, line_ind_vert_r];
-plot_lines(lines(1,line_ind), im_rgb);
+if debug
+    line_ind = [line_ind, line_ind_vert_l, line_ind_vert_r];
+    plot_lines(lines(1,line_ind), im_rgb);
+end
 
 % get useful lines
 l_v_left = lines_vertical_l(:,1);

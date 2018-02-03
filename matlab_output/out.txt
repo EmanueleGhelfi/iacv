@@ -12,7 +12,8 @@ theta =
 
   57.087157363489169
 
-Rotation matrix from left to right. This is the rotation of the right
+Rotation matrix from left to right.
+This is the rotation of the right
 Reference frame in the left reference frame.
 
 R_from_left_to_right =
@@ -30,6 +31,12 @@ relative_pose_from_left_to_right =
    1.853883835850114
   -0.667861096818124
                    0
+
+Distance from left to right
+
+relative_position =
+
+     1.970513567948578e+02
 
 Camera Intrinsic Parameters
 
@@ -128,7 +135,7 @@ camera_orientation_wrt_right =
    0.479082768330263  -0.619161984629154   0.622188185261582
   -0.042669784080417  -0.724418072414284  -0.688039058401559
 
-Position of the camera in the frame of the left horizontal face
+3D Position of the camera in the frame of the right horizontal face
 
 cameraPos_wrt_right =
 
@@ -138,7 +145,29 @@ cameraPos_wrt_right =
   -2.727355201929570
    2.942239839695089
 
-3d coordinates of the points on the vertical faces. 
+3D coordinates of the left face
+
+left_face =
+
+   1.0e+02 *
+
+                   0   2.430000000000000                   0
+                   0                   0                   0
+   0.626074947481594   2.430000000000000                   0
+   0.626074947481594                   0                   0
+
+3D coordinates of the right face
+
+right_face =
+
+   1.0e+02 *
+
+   3.893864201608771   0.652510103761161                   0
+   1.853883835850114  -0.667861096818124                   0
+   4.234049934143291   0.126921379334892                   0
+   2.194069568384635  -1.193449821244393                   0
+
+3D coordinates of the points on the vertical faces. 
 First four points are on the left vertical face.
 The other four are on the right vertical face.
 Coordinates are in the frame of the left horizontal face.
@@ -147,11 +176,12 @@ vert_points =
 
    1.0e+02 *
 
-   0.015414201042978                   0   0.019170226246530
-   0.016678879198411                   0  -2.082483315996573
-   0.568770513884049                   0  -2.078203725292395
-   0.567257454649088                   0   0.003425679758380
-   1.852564469873516  -0.665822669528639  -0.004663160952759
-   1.858600813021336  -0.675148851057844  -2.082725200459683
-   2.150603873877010  -1.126295097375289  -2.119507205189755
-   2.145882756202694  -1.119000946036775  -0.006334383951559
+   0.004914504644438                   0   0.004655668686494
+   0.013674999355014                   0  -2.099546411113903
+   0.578534926105212                   0  -2.087426232091683
+   0.574423606267144                   0  -0.000664011509867
+   1.851925438905066  -0.664835363361875   0.005021731253222
+   1.859487059922717  -0.676518107125559  -2.100440188981099
+   2.152070116567267  -1.128560449950572  -2.136719122916597
+   2.152364263163116  -1.129014907969593   0.000068027775174
+

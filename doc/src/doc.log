@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.1.15)  1 FEB 2018 21:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.1.15)  3 FEB 2018 11:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1096,7 +1096,7 @@ File: ../../imgs/used_lines.jpg Graphic file (type jpg)
 <use ../../imgs/used_lines.jpg>
 Package pdftex.def Info: ../../imgs/used_lines.jpg used on input line 699.
 (pdftex.def)             Requested size: 258.00539pt x 188.31174pt.
- [26 <../../imgs/used_lines.jpg>] [27]
+ [26] [27 <../../imgs/used_lines.jpg>] [28]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 714.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 714.
 
@@ -1108,8 +1108,8 @@ Package rerunfilecheck Info: File `doc.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 714.
  ) 
 Here is how much of TeX's memory you used:
- 21065 strings out of 492995
- 395413 string characters out of 6132704
+ 21066 strings out of 492995
+ 395420 string characters out of 6132704
  497001 words of memory out of 5000000
  24111 multiletter control sequences out of 15000+600000
  11240 words of font info for 42 fonts, out of 8000000 for 9000
@@ -1129,10 +1129,10 @@ xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
 e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive
 /2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on doc.pdf (27 pages, 9280095 bytes).
+Output written on doc.pdf (28 pages, 9280805 bytes).
 PDF statistics:
- 407 PDF objects out of 1000 (max. 8388607)
- 337 compressed objects within 4 object streams
- 102 named destinations out of 1000 (max. 500000)
+ 412 PDF objects out of 1000 (max. 8388607)
+ 341 compressed objects within 4 object streams
+ 103 named destinations out of 1000 (max. 500000)
  270 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -21,6 +21,7 @@ global LINES_LONG_LEFT LINES_LONG_RIGHT LINES_SHORT_LEFT ...
 indices = 1:length(lines);
 L = getLineMatrix(lines, indices);
 
+% hardcoded lines for automatic selection
 if (auto_selection)
     switch line_group
         case LINES_LONG_LEFT
@@ -61,7 +62,7 @@ else
     for ii = 1:length(x)
 
         min_dist = 1000000;
-        index = 0;
+        index = 1;
 
         % search the line with min distance
         for jj = 1:size(L,2)
