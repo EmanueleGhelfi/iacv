@@ -1,5 +1,6 @@
 
 - INSTRUCTIONS -
+To run correctly the script the user must open the whole directory "iacv" with matlab and check that the folder "imgs" and the folder "src/utils" have been added to the path. If not run the "startup.m" script or reopen matlab with the directory already opened in it or add them manually.
 
 - FOLDER DESCRIPTION -
 - src: The principal matlab files are inside the “src” folder.

@@ -15,7 +15,7 @@ end
 % sobel, canny, prewitt, roberts
 % BW2 = edge(im_grey,'canny');
 if method == "canny"
-    [BW2, th] = edge(im_grey,"canny");
+    [BW2, th] = edge(im_grey,'canny');
     if debug
         figure;
         imshow(BW2)
